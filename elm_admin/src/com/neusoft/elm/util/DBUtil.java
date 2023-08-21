@@ -13,7 +13,7 @@ public class DBUtil {
 	//jdbc:mysql://localhost:3306/?user=root
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
 	private static final String USERNAME = "root";
-	private static final String PASSWORD = "alan020180942";
+	private static final String PASSWORD = "123";
 	
 	//获取Connection
 	public static Connection getConnection() {
