@@ -1,6 +1,11 @@
 # SoftwarePractice
 
 ## 1. JDBC
+**DataBase_MySQL**
+```
+user : root
+password : 123
+```
 ## 2. Front_End
 1. 创建 elm_demo 前端工程
 2. 放入 font-awesome 第三方字体库包
