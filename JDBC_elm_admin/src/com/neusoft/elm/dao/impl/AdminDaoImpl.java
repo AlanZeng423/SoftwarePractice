@@ -18,7 +18,10 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public Admin getAdminByNameByPass(String adminName, String password) {
 		Admin admin = null;
+		//不要new，需要赋值为null
+		//便于调用者查看是否有查询出数据，若为null则没有查询出数据
 		String sql = "select * from admin where adminName=? and password=?";
+		//sql语句
 		try {
 			con = DBUtil.getConnection();
 			pst = con.prepareStatement(sql);
@@ -26,6 +29,7 @@ public class AdminDaoImpl implements AdminDao{
 			pst.setString(2, password);
 			rs = pst.executeQuery();
 			while(rs.next()) {
+				//循环要确保查询的一致性
 				admin = new Admin();
 				admin.setAdminId(rs.getInt("adminId"));
 				admin.setAdminName(rs.getString("adminName"));

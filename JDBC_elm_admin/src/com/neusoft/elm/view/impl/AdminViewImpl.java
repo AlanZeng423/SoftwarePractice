@@ -1,5 +1,6 @@
 package com.neusoft.elm.view.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 import com.neusoft.elm.dao.AdminDao;
@@ -17,7 +18,6 @@ public class AdminViewImpl implements AdminView{
 		String adminName = input.next();
 		System.out.println("请输入密码：");
 		String password = input.next();
-		
 		AdminDao dao = new AdminDaoImpl();
 		return dao.getAdminByNameByPass(adminName, password);
 	}

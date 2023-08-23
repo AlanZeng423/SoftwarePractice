@@ -31,18 +31,23 @@ public class ElmAdminEntry {
 				menu = input.nextInt();
 				switch(menu) {
 					case 1:
+						//所有商家列表
 						businessView.listBusinessAll();
 						break;
 					case 2:
+						//搜索商家
 						businessView.listBusiness();
 						break;
 					case 3:
+						//新建商家
 						businessView.saveBusiness();
 						break;
 					case 4:
+						//删除商家
 						businessView.removeBusiness();
 						break;
 					case 5:
+						//退出系统
 						System.out.println("------------------------欢迎下次光临饿了么后台管理系统-----------------------");
 						break;	
 					default:
