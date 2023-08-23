@@ -1,5 +1,10 @@
 # macOS specific files
 .DS_Store
 
-# ...其他规则...
+# IDEA
+.idea/
 
+
+
+# ...其他规则...
+*.iml
