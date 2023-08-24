@@ -11,6 +11,7 @@
 7. 根据需求创建 javaScript 文件 
 ## 3. Servlet 
 ### Frontend by ALAN
+在 SoftwarePractice/myVue/elmClient 路径下
 VUE-CLI
 - Create a vue3 project
 ```bash
