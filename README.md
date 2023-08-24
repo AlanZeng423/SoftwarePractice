@@ -12,7 +12,8 @@
 ## 3. Servlet 
 ### Frontend by ALAN
 在 SoftwarePractice/myVue/elmClient 路径下
-VUE-CLI
+
+基于 VUE-CLI
 - Create a vue3 project
 ```bash
 npm create vue@latest
