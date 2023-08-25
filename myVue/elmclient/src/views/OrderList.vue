@@ -58,38 +58,85 @@
     </div>
 </template>
 <script>
+// import Footer from '../components/Footer.vue';
+// export default {
+//     name: 'OrderList',
+//     data() {
+//         return {
+//             orderArr: [],
+//             user: {}
+//         }
+//     },
+//     created() {
+//         this.user = this.$getSessionStorage('user');
+//         this.$axios.post('OrdersController/listOrdersByUserId', this.$qs.stringify({
+//             userId: this.user.userId
+//         })).then(response => {
+//             let result = response.data;
+//             for (let orders of result) {
+//                 orders.isShowDetailet = false;
+//             }
+//             this.orderArr = result;
+//         }).catch(error => {
+//             console.error(error);
+//         });
+//     }, methods: {
+//         detailetShow(orders) {
+//             orders.isShowDetailet = !orders.isShowDetailet;
+//         }
+//     },
+//     components: {
+//         Footer
+//     }
+// }
+
+
+import { ref, onMounted } from 'vue';
 import Footer from '../components/Footer.vue';
+
 export default {
     name: 'OrderList',
-    data() {
-        return {
-            orderArr: [],
-            user: {}
-        }
-    },
-    created() {
-        this.user = this.$getSessionStorage('user');
-        this.$axios.post('OrdersController/listOrdersByUserId', this.$qs.stringify({
-            userId: this.user.userId
-        })).then(response => {
-            let result = response.data;
-            for (let orders of result) {
-                orders.isShowDetailet = false;
-            }
-            this.orderArr = result;
-        }).catch(error => {
-            console.error(error);
-        });
-    }, methods: {
-        detailetShow(orders) {
-            orders.isShowDetailet = !orders.isShowDetailet;
-        }
-    },
     components: {
         Footer
+    },
+    setup() {
+        const orderArr = ref([]);
+        const user = ref({});
+
+        const $getSessionStorage = inject('$getSessionStorage');
+        const $axios = inject('$axios');
+        const $qs = inject('$qs');
+
+        onMounted(() => {
+            user.value = $getSessionStorage('user');
+            $axios.post('OrdersController/listOrdersByUserId', $qs.stringify({
+                    userId: user.value.userId
+                }))
+                .then(response => {
+                    const result = response.data.map(order => {
+                        return { ...order, isShowDetailet: false };
+                    });
+                    orderArr.value = result;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+
+        const detailetShow = (order) => {
+            order.isShowDetailet = !order.isShowDetailet;
+        };
+
+        return {
+            orderArr,
+            detailetShow
+        };
     }
-}
+};
 </script>
+
+
+
 <style scoped>
 /****************** 总容器 ******************/
 .wrapper {
@@ -167,4 +214,5 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}</style>
+}
+</style>

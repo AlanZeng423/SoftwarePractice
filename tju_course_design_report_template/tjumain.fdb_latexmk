@@ -1,0 +1,14 @@
+# Fdb version 4
+["pdflatex"] 1692940860 "/Users/alanzeng/SoftwarePractice/tju_course_design_report_template/tjumain.tex" "tjumain.pdf" "tjumain" 1692940860 2
+  "/Users/alanzeng/SoftwarePractice/tju_course_design_report_template/tjumain.tex" 1692940859 2308 8ecf86d1112cbc0ed95ee57b88c5c22a ""
+  "/usr/local/texlive/2023/texmf-dist/web2c/texmf.cnf" 1677365944 40745 87bb86a62d462f93a1efc6b0c65c872e ""
+  "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1692713261 7883453 4e1bbc919f572ebd7257e20e5499e915 ""
+  "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
+  "body/intros.tex" 1692868152 12754 dd020656fc8661dadf69245afbc22834 ""
+  "tjumain.aux" 1692940860 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "tjumain.tex" 1692940859 2308 8ecf86d1112cbc0ed95ee57b88c5c22a ""
+  (generated)
+  "tjumain.aux"
+  "tjumain.log"
+  "tjumain.pdf"
+  (rewritten before read)

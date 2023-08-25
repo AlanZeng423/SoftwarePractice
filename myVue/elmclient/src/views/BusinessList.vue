@@ -99,10 +99,8 @@ export default {
         // const router = router(); // Get router from the Composition API
         // const route = useRoute(); // Get route from the Composition API
 
-        // const route = inject('$route');
-
-
-        onMounted(async() => {
+        // const route = inject('$route
+        onMounted(() => {
             // const currentRoute = await route; // Wait for route to be ready
             // orderTypeId = currentRoute.orderTypeId;
             
