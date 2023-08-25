@@ -105,14 +105,19 @@ public class FoodViewImpl implements FoodView{
 		}else {
 			System.out.println("请选择要删除的食品编号：");
 			int foodId = input.nextInt();
-			
-			System.out.println("确认要删除吗(y/n)：");
-			if(input.next().equals("y")) {
-				int result = dao.removeFood(foodId);
-				if(result>0) {
-					System.out.println("\n删除食品成功！\n");
-				}else {
-					System.out.println("\n删除食品失败！\n");
+			Food food = dao.getFoodById(foodId);
+			if(!Objects.equals(food.getBusinessId(), businessId)){
+				System.out.println("该食物所属商家"+food.getBusinessId()+",您没有权限删除该食物！！！");
+			}
+			else {
+				System.out.println("确认要删除吗(y/n)：");
+				if (input.next().equals("y")) {
+					int result = dao.removeFood(foodId);
+					if (result > 0) {
+						System.out.println("\n删除食品成功！\n");
+					} else {
+						System.out.println("\n删除食品失败！\n");
+					}
 				}
 			}
 		}

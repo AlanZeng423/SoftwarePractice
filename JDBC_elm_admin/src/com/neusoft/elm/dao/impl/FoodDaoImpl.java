@@ -75,7 +75,7 @@ public class FoodDaoImpl implements FoodDao{
 			while(rs.next()) {
 				food = new Food();
 				food.setFoodId(rs.getInt("foodId"));
-				food.setFoodName(rs.getString("foodName"));10006
+				food.setFoodName(rs.getString("foodName"));
 				food.setFoodExplain(rs.getString("foodExplain"));
 				food.setFoodPrice(rs.getDouble("foodPrice"));
 				food.setBusinessId(rs.getInt("businessId"));
