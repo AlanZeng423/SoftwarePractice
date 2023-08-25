@@ -60,13 +60,11 @@ public class Business {
 
     //重写toString函数，因为有些时候会出现直接输出business的情况
     public String toString() {
-        return "商家{" +
-                "商家编号=" + businessId +
-                ", 商家名称='" + businessName + '\'' +
-                ", 商家地址='" + businessAddress + '\'' +
-                ", 商家介绍='" + businessExplain + '\'' +
-                ", 起送费 =" + starPrice +
-                ", 配送费=" + deliveryPrice +
-                '}';
+        return "\n商家编号："+this.businessId+
+                "\n商家名称："+this.businessName+
+                "\n商家地址："+this.businessAddress+
+                "\n商家介绍："+this.businessExplain+
+                "\n起送费："+this.starPrice+
+                "\n配送费："+this.deliveryPrice;
     }
 }

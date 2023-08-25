@@ -44,12 +44,10 @@ public class Food {
 
     //重写toString函数，因为有些时候会出现直接输出food的情况
     public String toString() {
-        return "Food{" +
-                "食品编号=" + foodId +
-                ", 食品名称='" + foodName + '\'' +
-                ", 食品描述='" + foodExplain + '\'' +
-                ", 食品价格=" + foodPrice +
-                ", 所属商家编号=" + businessId +
-                '}';
+        return "\n食品编号："+this.foodId+
+                "\n食品名称："+this.foodName+
+                "\n食品介绍："+this.foodExplain+
+                "\n食品价格："+this.foodPrice+
+                "\n所属商家："+this.businessId;
     }
 }

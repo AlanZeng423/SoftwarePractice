@@ -3,7 +3,7 @@ package com.neusoft.elm.util;
 import java.sql.*;
 
 public class DBUtil {
-    private static String jdbcUrl = "jdbc:mysql://localhost:3306/your_database_name";
+    private static String jdbcUrl = "jdbc:mysql://localhost:3306/elm_admin?characterEncoding=utf-8";
     private static String username = "root";
     private static String password = "123";
 

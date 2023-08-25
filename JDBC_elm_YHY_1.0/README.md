@@ -1,4 +1,4 @@
-# JDBC—8.24更新
+# JDBC—8.25更新
 ### 一、po层
 出现位置为数据库数据，用来存储数据库提取的数据；只存储数据，不包含数据操作
 1. 主要是对应数据库的各个表项的后端实现
@@ -28,6 +28,7 @@ Util类，一般是无状态的，只包含静态方法。使用时无需创建�
    1. PreparedStatement pst = connection.prepareStatement(sql)——给出一个可能缺少参数的sql语句进行预编译
    2. pst.setString(第几个参数, 添加的参数)——为预存的sql语句添加参数
    3. pst.executeQuery()——执行查询，每运行一次=完成一次查询
+   4. pst.executeUpdate()——执行update/insert/delete，中的任意一个
 3. ResultSet，结果集  
 常和预编译类的pst一起使用  
 ResultSet resultSet = pst.executeQuery()——将查询结果放入resultset中
@@ -40,3 +41,8 @@ ResultSet resultSet = pst.executeQuery()——将查询结果放入resultset中
 对于dao层 和 service层这种比较复杂的层级，进行高度解耦合  
 先写一个interface，这个接口以service/dao为后缀表示这是一个service/dao接口，在这个类里定义好我们需要的方法，然后写实现类去实现这个接口里的方法
 
+### 附加4：一个事务中进行多个数据库的操作
+需要执行connection.setAutoCommit(false);将数据库连接设置为手动提交模式  
+使得如果操作时发生异常，通过connection.rollback();实现回滚到当前事务所有sql语句执行之前  
+如果没有异常，需要connection.commit();完成提交
+（如果不设置为手动提交，出错时系统会自动回滚到当前sql语句执行前的状态）

@@ -54,35 +54,39 @@ public class FoodViewImpl implements FoodView{
 			System.out.println("请选择要更新的食品编号：");
 			int foodId = input.nextInt();
 			Food food = dao.getFoodById(foodId);
-			System.out.println(food);
-			
-			String inputStr = "";
-			System.out.println("是否更新食品名称(y/n)：");
-			inputStr = input.next();
-			if(inputStr.equals("y")) {
-				System.out.println("请输入新的食品名称：");
-				food.setFoodName(input.next());
+			if(!food.getBusinessId().equals(businessId)){
+				System.out.println("抱歉，该商品所属商家为"+food.getBusinessId()+"，您没有修改权限!");
 			}
-			
-			System.out.println("是否更新食品介绍(y/n)：");
-			inputStr = input.next();
-			if(inputStr.equals("y")) {
-				System.out.println("请输入新的食品介绍：");
-				food.setFoodExplain(input.next());
-			}
-			
-			System.out.println("是否更新食品价格(y/n)：");
-			inputStr = input.next();
-			if(inputStr.equals("y")) {
-				System.out.println("请输入新的食品价格：");
-				food.setFoodPrice(input.nextDouble());
-			}
-			
-			int result = dao.updateFood(food);
-			if(result>0) {
-				System.out.println("\n修改食品成功！\n");
-			}else {
-				System.out.println("\n修改食品失败！\n");
+			else{
+				System.out.println(food);
+				String inputStr = "";
+				System.out.println("是否更新食品名称(y/n)：");
+				inputStr = input.next();
+				if(inputStr.equals("y")) {
+					System.out.println("请输入新的食品名称：");
+					food.setFoodName(input.next());
+				}
+
+				System.out.println("是否更新食品介绍(y/n)：");
+				inputStr = input.next();
+				if(inputStr.equals("y")) {
+					System.out.println("请输入新的食品介绍：");
+					food.setFoodExplain(input.next());
+				}
+
+				System.out.println("是否更新食品价格(y/n)：");
+				inputStr = input.next();
+				if(inputStr.equals("y")) {
+					System.out.println("请输入新的食品价格：");
+					food.setFoodPrice(input.nextDouble());
+				}
+
+				int result = dao.updateFood(food);
+				if(result>0) {
+					System.out.println("\n修改食品成功！\n");
+				}else {
+					System.out.println("\n修改食品失败！\n");
+				}
 			}
 		}
 	}
@@ -97,16 +101,22 @@ public class FoodViewImpl implements FoodView{
 		}else {
 			System.out.println("请选择要删除的食品编号：");
 			int foodId = input.nextInt();
-			
-			System.out.println("确认要删除吗(y/n)：");
-			if(input.next().equals("y")) {
-				int result = dao.removeFood(foodId);
-				if(result>0) {
-					System.out.println("\n删除食品成功！\n");
-				}else {
-					System.out.println("\n删除食品失败！\n");
+			Food food = dao.getFoodById(foodId);
+			if(food.getBusinessId().equals(businessId)){
+				System.out.println("确认要删除吗(y/n)：");
+				if(input.next().equals("y")) {
+					int result = dao.removeFood(foodId);
+					if(result>0) {
+						System.out.println("\n删除食品成功！\n");
+					}else {
+						System.out.println("\n删除食品失败！\n");
+					}
 				}
 			}
+			else{
+				System.out.println("抱歉，该商品所属商家为"+food.getBusinessId()+"，您没有删除权限!");
+			}
+
 		}
 	}
 }
