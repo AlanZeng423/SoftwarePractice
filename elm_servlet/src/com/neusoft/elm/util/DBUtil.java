@@ -6,11 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 public class DBUtil {
     private static final ThreadLocal<Connection> TL = new ThreadLocal<Connection>();
-
+    //TL是储存con的线程
+    //每次TL.get()，都是得到con的一个副本
     private static final String URL="jdbc:mysql://localhost:3306/elm?characterEncoding=utf-8";
     private static final String DRIVER="com.mysql.jdbc.Driver";
     private static final String USERNAME="root";
     private static final String PASSWORD="123";
+    //上面都和之前JDBC的相同（都是连接DB的操作）
+
     // 获取Connection
     public static Connection getConnection() {
         Connection con = null;
@@ -18,6 +21,19 @@ public class DBUtil {
         if (con==null) {
             con = createConnection();
             TL.set(con);
+        }
+        return con;
+    }
+
+    private static Connection createConnection() {
+        Connection con = null;
+        if (con == null) {
+            try {
+                Class.forName(DRIVER);
+                con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return con;
     }
@@ -72,21 +88,10 @@ public class DBUtil {
                 con.close();
             }
             //至关重要，否则容易造成内存溢出等问题。
-            TL.remove();
+            TL.remove(); //相当于清除了TL的实例
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    private static Connection createConnection() {
-        Connection con = null;
-        if (con == null) {
-            try {
-                Class.forName(DRIVER);
-                con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return con;
-    }
+
 }
