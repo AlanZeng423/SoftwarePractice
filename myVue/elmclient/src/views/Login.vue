@@ -33,50 +33,111 @@
     </div>
 </template>
 <script>
+// import Footer from '../components/Footer.vue';
+// export default {
+//     name: 'Login',
+//     data() {
+//         return {
+//             userId: '',
+//             password: ''
+//         }
+//     }, methods: {
+
+//         login() {
+//             if (this.userId == '') {
+//                 alert('手机号码不能为空!');
+//                 return;
+//             }
+//             if (this.password == '') {
+//                 alert('密码不能为空!'); return;
+//             }
+//             //登录请求 
+//             this.$axios.post('UserController/getUserByIdByPass', this.$qs.stringify({
+//                 userId: this.userId,
+//                 password: this.password
+//             })).then(response => {
+//                 let user = response.data;
+//                 if (user == null) {
+//                     alert('用户名或密码不正确!');
+//                 } else {
+//                     //sessionstorage有容量限制，为了防止数据溢出，所以不将userImg数据放入session中
+//                     user.userImg = '';
+//                     this.$setSessionStorage('user', user);
+//                     this.$router.go(-1);
+//                 }
+//             }).catch(error => {
+//                 console.error(error);
+//             });
+//         },
+//         register() {
+//             this.$router.push({ path: 'register' });
+//         },
+//         components: {
+//             Footer
+//         }
+//     }
+// }
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios'; // 引入 axios
+import qs from 'qs';
+
 import Footer from '../components/Footer.vue';
+
 export default {
     name: 'Login',
-    data() {
-        return {
-            userId: '',
-            password: ''
-        }
-    }, methods: {
+    components: {
+        Footer,
+    },
+    setup() {
+        const userId = ref('');
+        const password = ref('');
 
-        login() {
-            if (this.userId == '') {
+        const router = useRouter();
+
+        const login = () => {
+            if (userId.value === '') {
                 alert('手机号码不能为空!');
                 return;
             }
-            if (this.password == '') {
-                alert('密码不能为空!'); return;
+            if (password.value === '') {
+                alert('密码不能为空!');
+                return;
             }
-            //登录请求 
-            this.$axios.post('UserController/getUserByIdByPass', this.$qs.stringify({
-                userId: this.userId,
-                password: this.password
-            })).then(response => {
-                let user = response.data;
-                if (user == null) {
-                    alert('用户名或密码不正确!');
-                } else {
-                    //sessionstorage有容量限制，为了防止数据溢出，所以不将userImg数据放入session中
-                    user.userImg = '';
-                    this.$setSessionStorage('user', user);
-                    this.$router.go(-1);
-                }
-            }).catch(error => {
-                console.error(error);
-            });
-        },
-        register() {
-            this.$router.push({ path: 'register' });
-        },
-        components: {
-            Footer
-        }
-    }
-}
+
+            // 登录请求
+            axios
+                .post('UserController/getUserByIdByPass', qs.stringify({
+                    userId: userId.value,
+                    password: password.value,
+                }))
+                .then(response => {
+                    const user = response.data;
+                    if (user === null) {
+                        alert('用户名或密码不正确!');
+                    } else {
+                        user.userImg = '';
+                        sessionStorage.setItem('user', JSON.stringify(user));
+                        router.go(-1);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        };
+
+        const register = () => {
+            router.push({ path: 'register' });
+        };
+
+        return {
+            userId,
+            password,
+            login,
+            register,
+        };
+    },
+};
 </script>
 <style scoped>
 /****************** 总容器 ******************/

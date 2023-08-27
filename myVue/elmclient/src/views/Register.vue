@@ -53,65 +53,146 @@
     </div>
 </template>
 <script>
+// import Footer from '../components/Footer.vue';
+// export default {
+//     name: 'Register',
+//     data() {
+//         return {
+//             user: {
+//                 userId: '',
+//                 password: '',
+//                 userName: '',
+//                 userSex: 1
+//             },
+//             confirmPassword: ''
+//         }
+//     }, methods: {
+//         checkUserId() {
+//             this.$axios.post('UserController/getUserById', this.$qs.stringify({
+//                 userId: this.user.userId,
+//             })).then(response => {
+//                 if (response.data == 1) {
+//                     this.user.userId = ''; alert('此手机号码已存在!')
+//                 }
+//             }).catch(error => {
+//                 console.error(error);
+//             });
+//         },
+//         register() {
+//             if (this.user.userId == '') {
+//                 alert('手机号码不能为空!'); return;
+//             }
+//             if (this.user.password == '') {
+//                 alert('密码不能为空!');
+//                 return;
+//             }
+//             if (this.user.password != this.confirmPassword) {
+//                 alert('两次输入的密码不一致!');
+//                 return;
+//             }
+//             if (this.user.userName == '') {
+//                 alert('用户名不能为空!');
+//                 return;
+//             }
+//             //注册请求
+//             this.$axios.post('UserController/saveUser', this.$qs.stringify(
+//                 this.user
+//             )).then(response => {
+//                 if (response.data > 0) {
+//                     alert('注册成功!'); this.$router.go(-1);
+//                 } else {
+//                     alert('注册失败!');
+//                 }
+//             }).catch(error => {
+//                 console.error(error);
+//             });
+//         }
+//     },
+//     components: {
+//         Footer
+//     }
+// }
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios'; // 添加这一行来引入 axios
+import qs from 'qs';
+
 import Footer from '../components/Footer.vue';
+
 export default {
     name: 'Register',
-    data() {
-        return {
-            user: {
-                userId: '',
-                password: '',
-                userName: '',
-                userSex: 1
-            },
-            confirmPassword: ''
-        }
-    }, methods: {
-        checkUserId() {
-            this.$axios.post('UserController/getUserById', this.$qs.stringify({
-                userId: this.user.userId,
-            })).then(response => {
-                if (response.data == 1) {
-                    this.user.userId = ''; alert('此手机号码已存在!')
-                }
-            }).catch(error => {
-                console.error(error);
-            });
-        },
-        register() {
-            if (this.user.userId == '') {
-                alert('手机号码不能为空!'); return;
+    components: {
+        Footer,
+    },
+    setup() {
+        const user = ref({
+            userId: '',
+            password: '',
+            userName: '',
+            userSex: 1,
+        });
+
+        const confirmPassword = ref('');
+
+        const router = useRouter();
+
+        const checkUserId = () => {
+            axios
+                .post('UserController/getUserById', qs.stringify({
+                    userId: user.value.userId,
+                }))
+                .then(response => {
+                    if (response.data === 1) {
+                        user.value.userId = '';
+                        alert('此手机号码已存在!');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        };
+
+        const register = () => {
+            if (user.value.userId === '') {
+                alert('手机号码不能为空!');
+                return;
             }
-            if (this.user.password == '') {
+            if (user.value.password === '') {
                 alert('密码不能为空!');
                 return;
             }
-            if (this.user.password != this.confirmPassword) {
+            if (user.value.password !== confirmPassword.value) {
                 alert('两次输入的密码不一致!');
                 return;
             }
-            if (this.user.userName == '') {
+            if (user.value.userName === '') {
                 alert('用户名不能为空!');
                 return;
             }
-            //注册请求
-            this.$axios.post('UserController/saveUser', this.$qs.stringify(
-                this.user
-            )).then(response => {
-                if (response.data > 0) {
-                    alert('注册成功!'); this.$router.go(-1);
-                } else {
-                    alert('注册失败!');
-                }
-            }).catch(error => {
-                console.error(error);
-            });
-        }
+
+            axios
+                .post('UserController/saveUser', qs.stringify(user.value))
+                .then(response => {
+                    if (response.data > 0) {
+                        alert('注册成功!');
+                        router.go(-1);
+                    } else {
+                        alert('注册失败!');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        };
+
+        return {
+            user,
+            confirmPassword,
+            checkUserId,
+            register,
+        };
     },
-    components: {
-        Footer
-    }
-}
+};
 </script>
 <style scoped>
 /****************** 总容器 ******************/
@@ -203,4 +284,5 @@ export default {
     border: none;
     outline: none;
     border: solid 1px #DDD;
-}</style>
+}
+</style>
