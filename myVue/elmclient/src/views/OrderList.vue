@@ -1,14 +1,24 @@
 <template>
-
     <div class="wrapper">
         <!-- header部分 -->
         <header>
             <p>我的订单</p>
         </header>
+        <!-- TEST -->
+        <!-- <h3>
+            TEST:
+        </h3>
+        <ul class="order">
+            <li v-for="item in orderArr.value">
+                {{ item.businessId }}
+            </li>
+        </ul> -->
+
         <!-- 订单列表部分 -->
+
         <h3>未支付订单信息:</h3>
         <ul class="order">
-            <li v-for="item in orderArr.value" v-if="orderLoad && item.orderState == 0">
+            <li v-for="item in orderArr.value" v-if="item.orderState == 0">
                 <div class="order-info">
                     <p>
                         {{ item.business.businessName }}
@@ -26,14 +36,15 @@
                     </li>
                     <li>
                         <p>配送费</p>
-                        <p>&#165;{{ item.business.deliveryPrice }}</p>
+                        <p>
+                            &#165;{{ item.business.deliveryPrice }}</p>
                     </li>
                 </ul>
             </li>
         </ul>
         <h3>已支付订单信息:</h3>
         <ul class="order">
-            <li v-for="item in orderArr.value" v-if="orderLoad && item.orderState == 1">
+            <li v-for="item in orderArr.value" v-if="item.orderState == 1">
                 <div class="order-info">
                     <p>
                         <i class="fa fa-caret-down" @click="detailetShow(item)"></i>
@@ -50,8 +61,9 @@
                     </li>
                     <li>
                         <p>配送费</p>
-                        <p>&#165;
-                            {{ item.business.deliveryPrice }}</p>
+                        <p>
+                            &#165;{{ item.business.deliveryPrice }}
+                        </p>
                     </li>
                 </ul>
             </li>
@@ -94,10 +106,11 @@
 // }
 
 
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, inject, onBeforeMount } from 'vue';
 import Footer from '../components/Footer.vue';
 import axios from 'axios'; // 添加这一行来引入 axios
 import qs from 'qs';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
     name: 'OrderList',
@@ -108,52 +121,55 @@ export default {
         const $getSessionStorage = inject('$getSessionStorage');
         const orderArr = ref([]);
         const user = ref({});
-        const orderLoad= ref(false);
+        const orderLoad = ref(false);
 
-        
+
         // const $axios = inject('$axios');
         // const $qs = inject('$qs');
 
-        onMounted(async() => {
+        onBeforeMount(() => {
             user.value = $getSessionStorage('user');
             axios.post('OrdersController/listOrdersByUserId', qs.stringify({
                 userId: user.value.userId
             })).then(response => {
+                // console.log("console.log(response.data);");
                 // console.log(response.data);
-                    // const result = response.data.map(order => {
-                    //     return { ...order, isShowDetailet: false };
-                    // });
-                    // orderArr.value = result;
-                orderArr.value = response.data;
+                // const result = response.data.map(order => {
+                //     return { ...order, isShowDetailet: false };
+                // });
+                // orderArr.value = result;
+                // orderArr.value = response.data;
                 let result = response.data;
                 // console.log(result);
-                for(let orders of result) {
-                    orders.isShowDetailet = false;    
-                    console.log(orders);
+                for (let orders of result) {
+                    orders.isShowDetailet = false;
+                    // console.log(orders);
                 }
-                    // orderArr.value = result;
-                    console.log(orderArr.value);
-                    console.log(orderArr);
-                    console.log(">>>>>>>>>>>>>>>");
-                    orderLoad.value = true;
-                    for(let i of orderArr.value){
-                        console.log(i.orderState);
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+                orderArr.value = result;
+                // console.log(orderArr.value);
+                // console.log(orderArr);
+                // console.log(">>>>>>>>>>>>>>>");
+
+                // orderLoad.value = true;
+
+                // console.log(orderLoad.value);
+                // for (let i of orderArr.value) {
+                //     console.log(i.orderState);
+                // }
+            }).catch(error => {
+                console.error(error);
+            });
         });
 
-        const detailetShow = (order) => {
-            order.isShowDetailet = !order.isShowDetailet;
+        const detailetShow = (orders) => {
+            orders.isShowDetailet = !orders.isShowDetailet;
         };
 
         return {
             orderArr,
             user,
-            detailetShow,
-            orderLoad
+            orderLoad,
+            detailetShow
         };
     }
 };
@@ -238,5 +254,4 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-</style>
+}</style>

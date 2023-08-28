@@ -136,8 +136,8 @@ export default {
             deliveryaddress,
             toPayment,
             toUserAddress,
-            totalPrice
-
+            totalPrice,
+            sexFilters
         };
     }
 }

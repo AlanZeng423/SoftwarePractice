@@ -321,15 +321,34 @@ color: #F1884F;">特</div>
 
 <script>
 //导入共通组件
+import { onMounted, ref, inject, computed } from 'vue';
+import axios from 'axios';
+import qs from 'qs';
+import { useRoute, useRouter } from 'vue-router';
 import Footer from '../components/Footer.vue';
+
+
 export default {
     name: 'Index',
-    mounted() {
-        document.onscroll = () => { //获取滚动条位置
-            let s1 = document.documentElement.scrollTop; let s2 = document.body.scrollTop;
+    components: {
+        Footer
+    },
+    setup() {
+        const $getSessionStorage = inject('$getSessionStorage');
+        const $setLocalStorage = inject('$setLocalStorage');
+        const $getLocalStorage = inject('$getLocalStorage')
+        const $removeLocalStorage = inject('$removeLocalStorage');
+        const $refs = inject('$refs');
+        const route = useRoute();
+        const router = useRouter();
+
+        onMounted(()=>{
+            document.onscroll = () => { //获取滚动条位置
+            let s1 = document.documentElement.scrollTop; 
+            let s2 = document.body.scrollTop;
             let scroll = s1 == 0 ? s2 : s1; //获取视口宽度
             let width = document.documentElement.clientWidth; //获取顶部固定块
-            let search = this.$refs.fixedBox;
+            let search = $refs.fixedBox;
             //判断滚动条超过视口宽度的12%时，搜索块变固定定位 
             if (scroll > width * 0.12) {
                 search.style.position = 'fixed';
@@ -338,19 +357,29 @@ export default {
             } else {
                 search.style.position = 'static';
             }
+        
+        }}) 
+        
+    
+        
+        const toBusinessList = (orderTypeId) =>{
+            router.push({ path: '/businessList', query: { orderTypeId: orderTypeId } });
         }
-    },
-    destroyed() {
-        //当切换到其他组件时，就不需要document滚动条事件，所以将此事件去掉
-        document.onscroll = null;
-    },
-    components: {
-        Footer
-    }, methods: {
-        toBusinessList(orderTypeId) {
-            this.$router.push({ path: '/businessList', query: { orderTypeId: orderTypeId } });
+        
+        const destroyed = () => {
+            document.onscroll = null;
         }
+
+        return{
+            toBusinessList,
+            destroyed
+        };
+
     }
+    
+    
+    
+    
 }
 
 
