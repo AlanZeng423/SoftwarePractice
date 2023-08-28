@@ -47,56 +47,86 @@
     </div>
 </template>
 <script>
+
+import { ref, onMounted, inject } from 'vue';
 import Footer from '../components/Footer.vue';
+import axios from 'axios';
+import qs from 'qs';
+import { useRoute, useRouter } from 'vue-router';
+
 export default {
     name: 'AddUserAddress',
-    data() {
-        return {
-            businessId: this.$route.query.businessId,
-            user: {},
-            deliveryAddress: {
-                contactName: '',
-                contactSex: 1,
-                contactTel: '',
-                address: ''
-            }
-        }
-    },
-    created() {
-        this.user = this.$getSessionStorage('user');
-    },
-    components: {
+    components:{
         Footer
-    }, methods: {
-        addUserAddress() {
-            if (this.deliveryAddress.contactName == '') {
+    },
+    setup(){
+        const $getSessionStorage = inject('$getSessionStorage');
+        const route = useRoute();
+        const router = useRouter();
+        const businessId = ref(route.query.businessId);
+        const user = ref({});
+        const deliveryAddress = ref({
+            contactName: '',
+            contactSex: 1,
+            contactTel: '',
+            address: ''
+        });
+        onMounted(()=>{
+            user.value = $getSessionStorage('user');
+        })
+
+        const addUserAddress = () => {
+            if (deliveryAddress.value.contactName == '') {
                 alert('联系人姓名不能为空!');
                 return;
             }
-            if (this.deliveryAddress.contactTel == '') {
+            if (deliveryAddress.value.contactTel == '') {
                 alert('联系人电话不能为空!'); return;
             }
-            if (this.deliveryAddress.address == '') {
+            if (deliveryAddress.value.address == '') {
                 alert('联系人地址不能为空!'); return;
             }
-            this.deliveryAddress.userId = this.user.userId;
-            this.$axios.post('DeliveryAddressController/saveDeliveryAddress',
-                this.$qs.stringify(
-                    this.deliveryAddress
-                )).then(response => {
-                    if (response.data > 0) {
-                        this.$router.push({
-                            path: '/userAddress', query:
-                                { businessId: this.businessId }
-                        });
-                    } else {
-                        alert('新增地址失败!');
-                    }
-                }).catch(error => {
-                    console.error(error);
-                });
+            deliveryAddress.value.userId = user.value.userId;
+            axios.post('DeliveryAddressController/saveDeliveryAddress', qs.stringify(
+                deliveryAddress.value
+            )).then(response => {
+                if (response.data > 0) {
+                    router.push({
+                        path: '/userAddress', 
+                        query: { businessId: businessId.value }
+                    });
+                } else {
+                    alert('新增地址失败!');
+                }
+            }).catch(error => {
+                console.error(error);
+            });
         }
+
+        return{
+
+            businessId,
+            user,
+            deliveryAddress,
+            addUserAddress
+
+        };
+
     }
+    // data() {
+    //     return {
+    //         businessId: this.$route.query.businessId,
+    //         user: {},
+    //         deliveryAddress: {
+    //             contactName: '',
+    //             contactSex: 1,
+    //             contactTel: '',
+    //             address: ''
+    //         }
+    //     }
+    // },
+    
+    
 }
 </script>
 <style scoped>

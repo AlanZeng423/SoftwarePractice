@@ -130,6 +130,7 @@ export default {
             password: '',
             userName: '',
             userSex: 1,
+            userImg: '',
         });
 
         const confirmPassword = ref('');

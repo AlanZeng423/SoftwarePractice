@@ -77,10 +77,12 @@
 //         }
 //     }
 // }
-import { ref } from 'vue';
+import { ref, onMounted, inject, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios'; // 引入 axios
+import axios from 'axios'; // 添加这一行来引入 axios
 import qs from 'qs';
+// import axios from 'axios'; // 引入 axios
+
 
 import Footer from '../components/Footer.vue';
 
@@ -90,6 +92,7 @@ export default {
         Footer,
     },
     setup() {
+        // const $axios = inject('$axios'); // Inject the $axios instance
         const userId = ref('');
         const password = ref('');
 

@@ -39,71 +39,74 @@
     </div>
 </template>
 <script>
+import { onMounted, ref, inject, computed } from 'vue';
+import axios from 'axios';
+import qs from 'qs';
+import { useRoute, useRouter } from 'vue-router';
+import Footer from '../components/Footer.vue';
+
 export default {
     name: 'Orders',
-    data() {
-        return {
-            businessId: this.$route.query.businessId,
-            business: {},
-            user: {},
-            cartArr: [],
-            deliveryaddress: {}
-        }
+    components: {
+        Footer
     },
-    created() {
-        this.user = this.$getSessionStorage('user');
-        this.deliveryaddress = this.$getLocalStorage(this.user.userId);
-        //查询当前商家 
-        this.$axios.post('BusinessController/getBusinessById', this.$qs.stringify({
-            businessId: this.businessId
-        })).then(response => {
-            this.business = response.data;
-        }).catch(error => {
-            console.error(error);
+    setup() {
+        const $getSessionStorage = inject('$getSessionStorage'); // Inject the $getSessionStorage method
+        const $getLocalStorage = inject('$getLocalStorage')
+        const router = useRouter();
+        const route = useRoute();
+        const businessId = ref(route.query.businessId);
+        const business = ref({});
+        // const user = ref({});
+        const user = ref({
+            gender: 1,
         });
-        //查询当前用户在购物车中的当前商家食品列表 
-        this.$axios.post('CartController/listCart', this.$qs.stringify({
-            userId: this.user.userId,
-            businessId: this.businessId
-        })).then(response => {
-            this.cartArr = response.data;
-        }).catch(error => {
-            console.error(error);
-        });
-    },
-    computed: {
-        totalPrice() {
-            let totalPrice = 0;
-            for (let cartItem of this.cartArr) {
-                totalPrice += cartItem.food.foodPrice * cartItem.quantity;
-            }
-            totalPrice += this.business.deliveryPrice;
-            return totalPrice;
+        const cartArr = ref([]);
+        const deliveryaddress = ref([]);
+
+
+        onMounted(()=> {
+            user.value = $getSessionStorage('user');
+            deliveryaddress.value = $getLocalStorage(user.value.userId);
+            //查询当前商家
+            axios.post('BusinessController/getBusinessById', qs.stringify({
+                businessId: businessId.value
+            })).then(response => {
+                business.value = response.data;
+            }).catch(error => {
+                console.error(error);
+            });
+            //查询当前用户在购物车中的当前商家食品列表 
+            axios.post('CartController/listCart', qs.stringify({
+                userId: user.value.userId,
+                businessId: businessId.value
+            })).then(response => {
+                cartArr.value = response.data;
+            }).catch(error => {
+                console.error(error);
+            });
+
+
+        })
+
+        const toUserAddress = () => {
+            router.push({ path: '/userAddress', query: { businessId: businessId.value } });
         }
-    }, filters: {
-        sexFilter(value) {
-            return value == 1 ? '先生' : '女士';
-        }
-    },
-    methods: {
-        toUserAddress() {
-            this.$router.push({ path: '/userAddress', query: { businessId: this.businessId } });
-        },
-        toPayment() {
-            if (this.deliveryaddress == null) {
+        const toPayment = () => {
+            if (deliveryaddress.value == null) {
                 alert('请选择送货地址!');
                 return;
             }
             //创建订单 
-            this.$axios.post('OrdersController/createOrders', this.$qs.stringify({
-                userId: this.user.userId,
-                businessId: this.businessId,
-                daId: this.deliveryaddress.daId,
-                orderTotal: this.totalPrice
+            axios.post('OrdersController/createOrders', qs.stringify({
+                userId: user.value.userId,
+                businessId: businessId.value,
+                daId: deliveryaddress.value.daId,
+                orderTotal: totalPrice.value
             })).then(response => {
                 let orderId = response.data;
                 if (orderId > 0) {
-                    this.$router.push({ path: '/payment', query: { orderId: orderId } });
+                    router.push({ path: '/payment', query: { orderId: orderId } });
                 } else {
                     alert('创建订单失败!');
                 }
@@ -111,8 +114,35 @@ export default {
                 console.error(error);
             });
         }
+        const totalPrice = computed(() => {
+            let totalPrice = 0;
+            for (let cartItem of cartArr.value) {
+                    totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+                }
+                totalPrice += business.value.deliveryPrice;
+                return totalPrice;
+            });
+
+        const sexFilters = (value) => {
+            return value === 1 ? '先生' : '女士';
+            
+        }
+
+        return {
+            businessId,
+            business,
+            user,
+            cartArr,
+            deliveryaddress,
+            toPayment,
+            toUserAddress,
+            totalPrice
+
+        };
     }
 }
+    
+
 </script>
 <style scoped>
 /****************** 总容器 ******************/

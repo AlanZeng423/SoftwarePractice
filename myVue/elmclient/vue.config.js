@@ -24,14 +24,14 @@ module.exports = {
 
 
 
-module.exports = {
-  devServer: {
-    proxy: {
-      '/elm': {
-        target: 'http://localhost:8080/', // 后端服务器地址
-        changeOrigin: true,
-        pathRewrite: { '^/elm': '' }
-      }
-    }
-  }
-};
+// module.exports = {
+//   devServer: {
+//     proxy: {
+//       '/elm': {
+//         target: 'http://localhost:8080/', // 后端服务器地址
+//         changeOrigin: true,
+//         pathRewrite: { '^/elm': '' }
+//       }
+//     }
+//   }
+// };

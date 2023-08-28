@@ -23,8 +23,11 @@
         <Footer></Footer>
     </div>
 </template>
+
+
+
 <script>
-import Footer from '../components/Footer.vue';
+
 // export default {
 //     name: 'BusinessList',
 //     data() {
@@ -74,8 +77,11 @@ import Footer from '../components/Footer.vue';
 //         }
 //     }
 // }
+import Footer from '../components/Footer.vue';
 import { ref, onMounted, inject, getCurrentInstance } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios'; // 添加这一行来引入 axios
+import qs from 'qs';
 
 export default {
     name: 'BusinessList',
@@ -83,34 +89,22 @@ export default {
         Footer
     },
     setup() {
-        const $axios = inject('$axios'); // Inject the $axios instance
-        const $qs = inject('$qs'); // Inject the $qs instance
+        // const $axios = inject('$axios'); // Inject the $axios instance
+        // const $qs = inject('$qs'); // Inject the $qs instance
         const $getSessionStorage = inject('$getSessionStorage'); // Inject the $getSessionStorage method
-
-        const orderTypeId = ref(null);
+        const router = useRouter();
+        const route = useRoute();
+        const orderTypeId = ref(route.query.orderTypeId);
         const businessArr = ref([]);
         const user = ref({});
-        
-        const router = useRouter()
-        const route = useRoute()
 
-        // const { $route } = getCurrentInstance(); // Get $route from the current instance
-        // const route = route(); // Get route from the Composition API
-        // const router = router(); // Get router from the Composition API
-        // const route = useRoute(); // Get route from the Composition API
-
-        // const route = inject('$route
-        onMounted(() => {
-            // const currentRoute = await route; // Wait for route to be ready
-            // orderTypeId = currentRoute.orderTypeId;
-            
+        onMounted(() => {      
             orderTypeId.value = route.query.orderTypeId;
             user.value = $getSessionStorage('user');
 
             //根据orderTypeId查询商家信息 
-            $axios.post('BusinessController/listBusinessByOrderTypeId', $qs.stringify({
-                orderTypeId: orderTypeId.value
-            })).then(response => {
+            axios.post('BusinessController/listBusinessByOrderTypeId', qs.stringify({ orderTypeId: orderTypeId.value })
+            ).then(response => {
                 businessArr.value = response.data; //判断是否登录 
                 if (user.value != null) {
                     listCart();
@@ -121,7 +115,7 @@ export default {
         });
 
         const listCart = () => {
-            $axios.post('CartController/listCart', $qs.stringify({
+            axios.post('CartController/listCart', qs.stringify({
                 userId: user.value.userId
             })).then(response => {
                 let cartArr = response.data; //遍历所有食品列表
@@ -142,13 +136,17 @@ export default {
         const toBusinessInfo = (businessId) => {
             router.push({ path: '/businessInfo', query: { businessId: businessId } });
         };
+        // const toIndex = () => {
+        //     router.push({ path: '/index' });
+        // };
 
         return {
             orderTypeId,
             businessArr,
             user,
             listCart,
-            toBusinessInfo
+            toBusinessInfo,
+            
         };
     }
 };

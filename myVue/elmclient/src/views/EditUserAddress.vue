@@ -48,53 +48,68 @@
     </div>
 </template>
 <script>
+import { ref, onMounted, inject } from 'vue';
 import Footer from '../components/Footer.vue';
+import axios from 'axios';
+import qs from 'qs';
+import { useRoute, useRouter } from 'vue-router';
 export default {
     name: 'EditUserAddress',
-    data() {
-        return {
-            businessId: this.$route.query.businessId,
-            daId: this.$route.query.daId,
-            user: {},
-            deliveryAddress: {}
-        }
+    components:{
+        Footer
     },
-    created() {
-        this.user = this.$getSessionStorage('user');
-        this.$axios.post('DeliveryAddressController/getDeliveryAddressById',
-            this.$qs.stringify({
-                daId: this.daId
+    setup(){
+        const $getSessionStorage = inject('$getSessionStorage');
+        const route = useRoute();
+        const router = useRouter();
+        const businessId = ref(route.query.businessId);
+        const daId = ref(route.query.daId);
+        const user = ref({});
+        const deliveryAddress = ref({});
+    
+    // data() {
+    //     return {
+    //         businessId: this.$route.query.businessId,
+    //         daId: this.$route.query.daId,
+    //         user: {},
+    //         deliveryAddress: {}
+    //     }
+    // },
+        onMounted(()=>{
+        
+            user.value = $getSessionStorage('user');
+            axios.post('DeliveryAddressController/getDeliveryAddressById',qs.stringify({
+                daId: daId.value
             })).then(response => {
-                this.deliveryAddress = response.data;
+                deliveryAddress.value = response.data;
             }).catch(error => {
                 console.error(error);
-            });
-    },
-    components: {
-        Footer
-    }, methods: {
-        editUserAddress() {
-            if (this.deliveryAddress.contactName == '') {
+            })
+        }) 
+
+
+    
+        const editUserAddress = () => {
+            if (deliveryAddress.value.contactName == '') {
                 alert('联系人姓名不能为空!');
                 return;
             }
-            if (this.deliveryAddress.contactTel == '') {
+            if (deliveryAddress.value.contactTel == '') {
                 alert('联系人电话不能为空!');
                 return;
             }
-            if (this.deliveryAddress.address == '') {
+            if (deliveryAddress.value.address == '') {
                 alert('联系人地址不能为空!');
                 return;
             }
-            this.$axios.post('DeliveryAddressController/updateDeliveryAddress',
-                this.$qs.stringify(
-                    this.deliveryAddress
+            axios.post('DeliveryAddressController/updateDeliveryAddress',qs.stringify(
+                deliveryAddress.value
                 )).then(response => {
                     if (response.data > 0) {
-                        this.$router.push({
+                        router.push({
                             path: '/userAddress',
                             query: {
-                                businessId: this.businessId
+                                businessId: businessId.value
                             }
                         });
                     } else {
@@ -104,8 +119,18 @@ export default {
                     console.error(error);
                 });
         }
-    }
+
+        return{
+            businessId,
+            daId,
+            user,
+            deliveryAddress,
+            editUserAddress
+        };
+
+    }    
 }
+
 </script>
 <style scoped>
 /*************** 总容器 ***************/

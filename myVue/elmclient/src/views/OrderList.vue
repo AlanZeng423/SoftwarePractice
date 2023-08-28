@@ -1,4 +1,5 @@
 <template>
+
     <div class="wrapper">
         <!-- header部分 -->
         <header>
@@ -7,7 +8,7 @@
         <!-- 订单列表部分 -->
         <h3>未支付订单信息:</h3>
         <ul class="order">
-            <li v-for="item in orderArr" v-if="item.orderState == 0">
+            <li v-for="item in orderArr.value" v-if="orderLoad && item.orderState == 0">
                 <div class="order-info">
                     <p>
                         {{ item.business.businessName }}
@@ -32,13 +33,14 @@
         </ul>
         <h3>已支付订单信息:</h3>
         <ul class="order">
-            <li v-for="item in orderArr" v-if="item.orderState == 1">
+            <li v-for="item in orderArr.value" v-if="orderLoad && item.orderState == 1">
                 <div class="order-info">
                     <p>
                         <i class="fa fa-caret-down" @click="detailetShow(item)"></i>
                     </p>
                     <div class="order-info-right">
-                        <p>&#165;{{ item.orderTotal }}</p>
+                        <p>&#165;
+                            {{ item.orderTotal }}</p>
                     </div>
                 </div>
                 <ul class="order-detailet" v-show="item.isShowDetailet">
@@ -48,7 +50,8 @@
                     </li>
                     <li>
                         <p>配送费</p>
-                        <p>&#165;{{ item.business.deliveryPrice }}</p>
+                        <p>&#165;
+                            {{ item.business.deliveryPrice }}</p>
                     </li>
                 </ul>
             </li>
@@ -91,8 +94,10 @@
 // }
 
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import Footer from '../components/Footer.vue';
+import axios from 'axios'; // 添加这一行来引入 axios
+import qs from 'qs';
 
 export default {
     name: 'OrderList',
@@ -100,23 +105,40 @@ export default {
         Footer
     },
     setup() {
+        const $getSessionStorage = inject('$getSessionStorage');
         const orderArr = ref([]);
         const user = ref({});
+        const orderLoad= ref(false);
 
-        const $getSessionStorage = inject('$getSessionStorage');
-        const $axios = inject('$axios');
-        const $qs = inject('$qs');
+        
+        // const $axios = inject('$axios');
+        // const $qs = inject('$qs');
 
-        onMounted(() => {
+        onMounted(async() => {
             user.value = $getSessionStorage('user');
-            $axios.post('OrdersController/listOrdersByUserId', $qs.stringify({
-                    userId: user.value.userId
-                }))
-                .then(response => {
-                    const result = response.data.map(order => {
-                        return { ...order, isShowDetailet: false };
-                    });
-                    orderArr.value = result;
+            axios.post('OrdersController/listOrdersByUserId', qs.stringify({
+                userId: user.value.userId
+            })).then(response => {
+                // console.log(response.data);
+                    // const result = response.data.map(order => {
+                    //     return { ...order, isShowDetailet: false };
+                    // });
+                    // orderArr.value = result;
+                orderArr.value = response.data;
+                let result = response.data;
+                // console.log(result);
+                for(let orders of result) {
+                    orders.isShowDetailet = false;    
+                    console.log(orders);
+                }
+                    // orderArr.value = result;
+                    console.log(orderArr.value);
+                    console.log(orderArr);
+                    console.log(">>>>>>>>>>>>>>>");
+                    orderLoad.value = true;
+                    for(let i of orderArr.value){
+                        console.log(i.orderState);
+                    }
                 })
                 .catch(error => {
                     console.error(error);
@@ -129,7 +151,9 @@ export default {
 
         return {
             orderArr,
-            detailetShow
+            user,
+            detailetShow,
+            orderLoad
         };
     }
 };

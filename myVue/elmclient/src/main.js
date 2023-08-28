@@ -35,9 +35,9 @@ const app = createApp(App, {
 axios.defaults.baseURL = 'http://localhost:8080/elm/'; //将axios挂载到vue实例上，使用时就可以 this.$axios 这样使用了 Vue.prototype.$axios = axios;
 app.provide('$qs', qs);
 // app.provide('$http', axios);
-// app.config.globalProperties.$axios = axios;
+app.config.globalProperties.$axios = axios;
 
-app.provide('$axios', axios);
+// app.provide('$axios', axios);
 app.provide('$getCurDate', getCurDate);
 app.provide('$setSessionStorage', setSessionStorage);
 app.provide('$getSessionStorage', getSessionStorage);

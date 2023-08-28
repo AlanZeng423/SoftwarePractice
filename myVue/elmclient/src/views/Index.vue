@@ -317,6 +317,8 @@ color: #F1884F;">特</div>
         <Footer></Footer>
     </div>
 </template>
+
+
 <script>
 //导入共通组件
 import Footer from '../components/Footer.vue';
@@ -350,7 +352,60 @@ export default {
         }
     }
 }
+
+
+// import { onMounted, onBeforeUnmount, ref, getCurrentInstance, useAttrs} from 'vue';
+// import Footer from '../components/Footer.vue';
+// import { useRouter, useRoute } from 'vue-router';
+
+// export default {
+//     name: 'Index',
+//     components: {
+//         Footer
+//     },
+//     setup() {
+//         const p = getCurrentInstance();
+//         const route = useRoute();
+//         const router = useRouter();
+
+//         onMounted(() => {
+//             const s1 = document.documentElement.scrollTop;
+//             const s2 = document.body.scrollTop;
+//             const scroll = s1 === 0 ? s2 : s1;
+//             const width = document.documentElement.clientWidth;
+//             const search = p.refs.fixedBox;
+//             if (scroll > width * 0.12) {
+//                 search.style.position = 'fixed';
+//                 search.style.left = '0';
+//                 search.style.top = '0';
+//             } else {
+//                 search.style.position = 'static';
+//             }
+//         });
+
+//         const destroyed = () => {
+//             //当切换到其他组件时，就不需要document滚动条事件，所以将此事件去掉
+//             document.onscroll = null;
+//         };
+
+//         const toBusinessList = (orderTypeId) => {
+//             // 使用 router 对象来导航
+//             router.push({ path: '/businessList', query: { orderTypeId: orderTypeId.value } });
+//         };
+
+
+
+
+//         return {
+//             toBusinessList,
+//         };
+
+//     }
+// };
+
 </script>
+
+
 <style scoped>
 /****************** 总容器 ******************/
 .wrapper {
@@ -706,4 +761,5 @@ export default {
 
 .wrapper .business li .business-info .business-info-promotion .business-info-promotion-right p {
     margin-right: 2vw;
-}</style>
+}
+</style>
