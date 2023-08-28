@@ -15,6 +15,7 @@ public class UserController {
 
     public Object getUserById(HttpServletRequest request) throws Exception{
         String userId = request.getParameter("userId");
+//        System.out.println(userId);
         UserService service = new UserServiceImpl();
         int result = service.getUserById(userId);
         return result;

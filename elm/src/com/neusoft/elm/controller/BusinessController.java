@@ -6,6 +6,7 @@ import com.neusoft.elm.service.BusinessService;
 import com.neusoft.elm.service.impl.BusinessServiceImpl;
 public class BusinessController {
     public Object listBusinessByOrderTypeId(HttpServletRequest request) throws Exception{
+//        System.out.println(request.getParameter("orderTypeId"));
         Integer orderTypeId = Integer.valueOf(request.getParameter("orderTypeId"));
         BusinessService service = new BusinessServiceImpl();
         List<Business> list= service.listBusinessByOrderTypeId(orderTypeId);

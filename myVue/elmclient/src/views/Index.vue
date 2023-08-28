@@ -334,13 +334,14 @@ export default {
         Footer
     },
     setup() {
-        const $getSessionStorage = inject('$getSessionStorage');
-        const $setLocalStorage = inject('$setLocalStorage');
-        const $getLocalStorage = inject('$getLocalStorage')
-        const $removeLocalStorage = inject('$removeLocalStorage');
-        const $refs = inject('$refs');
+        // const $getSessionStorage = inject('$getSessionStorage');
+        // const $setLocalStorage = inject('$setLocalStorage');
+        // const $getLocalStorage = inject('$getLocalStorage')
+        // const $removeLocalStorage = inject('$removeLocalStorage');
+        // const $refs = inject('$refs');
         const route = useRoute();
         const router = useRouter();
+        const fixedBox = ref(null);
 
         onMounted(()=>{
             document.onscroll = () => { //获取滚动条位置
@@ -348,7 +349,7 @@ export default {
             let s2 = document.body.scrollTop;
             let scroll = s1 == 0 ? s2 : s1; //获取视口宽度
             let width = document.documentElement.clientWidth; //获取顶部固定块
-            let search = $refs.fixedBox;
+            let search = fixedBox.value;
             //判断滚动条超过视口宽度的12%时，搜索块变固定定位 
             if (scroll > width * 0.12) {
                 search.style.position = 'fixed';
@@ -372,7 +373,8 @@ export default {
 
         return{
             toBusinessList,
-            destroyed
+            destroyed,
+            fixedBox
         };
 
     }

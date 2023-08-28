@@ -18,7 +18,7 @@
 
         <h3>未支付订单信息:</h3>
         <ul class="order">
-            <li v-for="item in orderArr.value" v-if="item.orderState == 0">
+            <li v-for="item in orderArr.value" v-if="orderArr.value && item.orderState == 0">
                 <div class="order-info">
                     <p>
                         {{ item.business.businessName }}
@@ -43,8 +43,8 @@
             </li>
         </ul>
         <h3>已支付订单信息:</h3>
-        <ul class="order">
-            <li v-for="item in orderArr.value" v-if="item.orderState == 1">
+        <ul class="order" >
+            <li v-for="item in orderArr.value" v-if="orderArr.value && item.orderState == 1">
                 <div class="order-info">
                     <p>
                         <i class="fa fa-caret-down" @click="detailetShow(item)"></i>
@@ -121,7 +121,7 @@ export default {
         const $getSessionStorage = inject('$getSessionStorage');
         const orderArr = ref([]);
         const user = ref({});
-        const orderLoad = ref(false);
+        // const orderLoad = ref(false);
 
 
         // const $axios = inject('$axios');
@@ -163,12 +163,12 @@ export default {
 
         const detailetShow = (orders) => {
             orders.isShowDetailet = !orders.isShowDetailet;
-        };
+        }
 
         return {
             orderArr,
             user,
-            orderLoad,
+            // orderLoad,
             detailetShow
         };
     }
