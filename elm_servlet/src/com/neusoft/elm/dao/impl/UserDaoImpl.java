@@ -31,6 +31,7 @@ public class UserDaoImpl implements UserDao{
                 user.setUserSex(rs.getInt("userSex"));
                 user.setUserImg(rs.getString("userImg"));
                 user.setDelTag(rs.getInt("delTag"));
+                user.setPoint(rs.getInt("point"));
             }
         }finally {
             DBUtil.close(rs,pst);
@@ -59,7 +60,7 @@ public class UserDaoImpl implements UserDao{
     @Override
     public int saveUser(User user) throws Exception{
         int result = 0;
-        String sql = "insert into user values(?,?,?,?,?,1)";
+        String sql = "insert into user values(?,?,?,?,?,1,0)";
         try {
             con = DBUtil.getConnection();
             pst = con.prepareStatement(sql);

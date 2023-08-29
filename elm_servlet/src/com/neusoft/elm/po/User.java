@@ -1,5 +1,7 @@
 package com.neusoft.elm.po;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 public class User {
     private String userId;
     private String password;
@@ -7,7 +9,7 @@ public class User {
     private Integer userSex;
     private String userImg;
     private Integer delTag;
-
+    private Integer point;
     public String getUserId() {
         return userId;
     }
@@ -51,4 +53,10 @@ public class User {
     }
     //get、set ... ...
 
+    public Integer getPoint(){
+        return point;
+    }
+    public void setPoint(Integer point){
+        this.point = point;
+    }
 }

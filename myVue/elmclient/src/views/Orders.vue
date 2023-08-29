@@ -27,6 +27,20 @@
             <p>配送费</p>
             <p>&#165;{{ business.deliveryPrice }}</p>
         </div>
+
+        <div class="order-deliveryfee">
+            <p>可用积分为：{{user.point}}</p>
+            <button @click="toggleUsePoints">{{ usePoints ? '取消使用积分' : '使用积分' }}</button>
+        </div>
+
+
+        <div class="order-deliveryfee">
+            <p>积分抵扣金额为</p>
+            <p>&#165{{ discountNum }}</p>
+        </div>
+
+        
+
         <!-- 合计部分 -->
         <div class="total">
             <div class="total-left">
@@ -60,9 +74,16 @@ export default {
         // const user = ref({});
         const user = ref({
             gender: 1,
+            point: 0
         });
         const cartArr = ref([]);
         const deliveryaddress = ref([]);
+
+        //新增的积分部分
+        const usePoints = ref(false);// 默认不使用积分
+        const usePointsNum = ref(0);//使用积分的数量
+        const discountNum = ref(0);
+        
 
 
         onMounted(()=> {
@@ -89,6 +110,9 @@ export default {
 
         })
 
+        const toggleUsePoints = () =>{
+            usePoints.value = !usePoints.value;
+        }
         const toUserAddress = () => {
             router.push({ path: '/userAddress', query: { businessId: businessId.value } });
         }
@@ -106,7 +130,7 @@ export default {
             })).then(response => {
                 let orderId = response.data;
                 if (orderId > 0) {
-                    router.push({ path: '/payment', query: { orderId: orderId } });
+                    router.push({ path: '/payment', query: {orderId: orderId, discountNum: discountNum.value}});
                 } else {
                     alert('创建订单失败!');
                 }
@@ -120,6 +144,17 @@ export default {
                     totalPrice += cartItem.food.foodPrice * cartItem.quantity;
                 }
                 totalPrice += business.value.deliveryPrice;
+                if(usePoints.value){
+                    if(user.value.point/100 <= totalPrice){
+                        discountNum.value = user.value.point/100;
+                    }
+                    else{
+                        discountNum.value = totalPrice;
+                    }
+                    
+                    totalPrice -= discountNum.value;
+                }
+                //if()//在这个地方要判断是否使用积分
                 return totalPrice;
             });
 
@@ -134,10 +169,12 @@ export default {
             user,
             cartArr,
             deliveryaddress,
+            usePoints,
+            totalPrice,
+            discountNum,
             toPayment,
             toUserAddress,
-            totalPrice
-
+            toggleUsePoints
         };
     }
 }
@@ -261,7 +298,17 @@ export default {
     align-items: center;
     font-size: 3.5vw;
 }
-
+.wrapper .order-point {
+    width: 100%;
+    height: 20vw;
+    box-sizing: border-box;
+    padding: 3vw;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 3.5vw;
+}
 /****************** 订单合计部分 ******************/
 .wrapper .total {
     width: 100%;
