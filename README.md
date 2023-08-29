@@ -1,5 +1,13 @@
 # SoftwarePractice
 
+## git 如果一直显示Couldn't connect to server 处理方法：
+1. 打开代理，复制代理IP地址 & 端口，一般为127.0.0.1 & 7890
+2. 在git bash中输入git config --global http.proxy http://127.0.0.1:7890
+3. 以及git config --global https.proxy http://127.0.0.1:7890
+4. 之后再git push就没问题了
+
+
+
 ## 1. JDBC(DONE)
 Folder: JDBC_elm_admin
 DataBase : MySQL
