@@ -12,7 +12,7 @@
             <i class="fa fa-file-text-o"></i>
             <p>订单</p>
         </li>
-        <li>
+        <li @click="toUserInfo">
             <i class="fa fa-user-o"></i>
             <p>我的</p>
         </li>
@@ -45,9 +45,14 @@ export default {
             router.push({ path: '/orderList' });
         };
 
+        const toUserInfo = () => {
+            router.push({ path: '/userInfo'})
+        };
+
         return {
             toIndex,
-            toOrderList
+            toOrderList,
+            toUserInfo
         };
     }
 }

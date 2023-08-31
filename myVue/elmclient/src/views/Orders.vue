@@ -27,6 +27,22 @@
             <p>配送费</p>
             <p>&#165;{{ business.deliveryPrice }}</p>
         </div>
+
+        <div class="order-deliveryfee">
+            <p>可用积分为：{{user.point}}</p>
+            <div class="container">
+                <button class="Button" @click="toggleUsePoints">{{ usePoints ? '取消使用积分' : '使用积分' }}</button>
+            </div>
+            
+        </div>
+
+        <div class="order-deliveryfee">
+            <p>积分抵扣金额为</p>
+            <p>&#165{{ discountNum }}</p>
+        </div>
+
+        
+
         <!-- 合计部分 -->
         <div class="total">
             <div class="total-left">
@@ -60,11 +76,15 @@ export default {
         // const user = ref({});
         const user = ref({
             gender: 1,
+            point: 0
         });
         const cartArr = ref([]);
         const deliveryaddress = ref([]);
 
-
+        //新增的积分部分
+        const usePoints = ref(false);// 默认不使用积分
+        const discountNum = ref(0);
+        
         onMounted(()=> {
             user.value = $getSessionStorage('user');
             deliveryaddress.value = $getLocalStorage(user.value.userId);
@@ -89,6 +109,9 @@ export default {
 
         })
 
+        const toggleUsePoints = () =>{
+            usePoints.value = !usePoints.value;
+        }
         const toUserAddress = () => {
             router.push({ path: '/userAddress', query: { businessId: businessId.value } });
         }
@@ -120,6 +143,17 @@ export default {
                     totalPrice += cartItem.food.foodPrice * cartItem.quantity;
                 }
                 totalPrice += business.value.deliveryPrice;
+                if(usePoints.value){
+                    if(user.value.point/100 <= totalPrice){
+                        discountNum.value = user.value.point/100;
+                    }
+                    else{
+                        discountNum.value = totalPrice;
+                    }
+                    
+                    totalPrice -= discountNum.value;
+                }
+                //if()//在这个地方要判断是否使用积分
                 return totalPrice;
             });
 
@@ -137,7 +171,11 @@ export default {
             toPayment,
             toUserAddress,
             totalPrice,
+            toggleUsePoints,
+            usePoints,
+            discountNum,
             sexFilters
+
         };
     }
 }
@@ -261,7 +299,17 @@ export default {
     align-items: center;
     font-size: 3.5vw;
 }
-
+.wrapper .order-point {
+    width: 100%;
+    height: 20vw;
+    box-sizing: border-box;
+    padding: 3vw;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 3.5vw;
+}
 /****************** 订单合计部分 ******************/
 .wrapper .total {
     width: 100%;
@@ -295,4 +343,32 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-}</style>
+
+}
+
+.container {
+    margin: 20px;
+    background-color: #ffa7a7;
+    /* display: flex; */
+    /* justify-content: center;
+    align-items: center; */
+    /* height: 100vh; */
+    /* 垂直方向上铺满整个视口高度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+}
+
+.Button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    border: none;
+    color: #fc0505;
+    font-size: 15px;
+    /* text-decoration: underline; */
+    cursor: pointer;
+    text-align: center;
+}
+</style>

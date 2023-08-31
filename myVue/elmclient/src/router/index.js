@@ -12,6 +12,8 @@ import OrderList from '../views/OrderList.vue'
 import AddUserAddress from '../views/AddUserAddress.vue'
 import EditUserAddress from '../views/EditUserAddress.vue'
 import Register from '../views/Register.vue'
+import UserInfo from '../views/UserInfo.vue'
+import Paying from '../views/Paying.vue'
 
 // Vue.use(VueRouter)
 const routes = [{
@@ -62,6 +64,15 @@ const routes = [{
         path: '/register',
         name: 'Register',
         component: Register
+    }, {
+        path: '/userInfo',
+        name: 'UserInfo',
+        component: UserInfo
+    }, {
+        path: '/paying',
+        name: 'Paying',
+        component: Paying
+
     }
     ]
 //解决重复路由报异常问题

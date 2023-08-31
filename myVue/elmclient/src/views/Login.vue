@@ -119,7 +119,7 @@ export default {
                     if (user === null) {
                         alert('用户名或密码不正确!');
                     } else {
-                        user.userImg = '';
+                        // user.userImg = ;
                         sessionStorage.setItem('user', JSON.stringify(user));
                         router.go(-1);
                     }

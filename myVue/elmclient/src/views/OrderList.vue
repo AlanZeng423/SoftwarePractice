@@ -5,28 +5,30 @@
             <p>我的订单</p>
         </header>
         <!-- TEST -->
-        <!-- <h3>
+        <h3>
             TEST:
         </h3>
         <ul class="order">
-            <li v-for="item in orderArr.value">
-                {{ item.businessId }}
-            </li>
-        </ul> -->
+            <li>{{orderArr.value}}</li>
+
+            
+        </ul>
 
         <!-- 订单列表部分 -->
 
         <h3>未支付订单信息:</h3>
         <ul class="order">
-            <li v-for="item in orderArr.value" v-if="orderArr.value && item.orderState == 0">
-                <div class="order-info">
-                    <p>
-                        {{ item.business.businessName }}
-                        <i class="fa fa-caret-down" @click="detailetShow(item)"></i>
-                    </p>
-                    <div class="order-info-right">
-                        <p>&#165;{{ item.orderTotal }}</p>
-                        <div class="order-info-right-icon">去支付</div>
+            <li v-for="(item,index) in orderArr.value" :key="index">
+                <div v-if="item.value.orderState===0" >
+                    <div class="order-info">
+                        <p>
+                            {{ item.business.businessName }}
+                            <i class="fa fa-caret-down" @click="detailetShow(item)"></i>
+                        </p>
+                        <div class="order-info-right">
+                            <p>&#165;{{ item.orderTotal }}</p>
+                            <div class="order-info-right-icon">去支付</div>
+                        </div>
                     </div>
                 </div>
                 <ul class="order-detailet" v-show="item.isShowDetailet">
@@ -43,15 +45,17 @@
             </li>
         </ul>
         <h3>已支付订单信息:</h3>
-        <ul class="order" >
-            <li v-for="item in orderArr.value" v-if="orderArr.value && item.orderState == 1">
-                <div class="order-info">
-                    <p>
-                        <i class="fa fa-caret-down" @click="detailetShow(item)"></i>
-                    </p>
-                    <div class="order-info-right">
-                        <p>&#165;
-                            {{ item.orderTotal }}</p>
+        <ul class="order">
+            <li v-for="(item,index) in orderArr.value" :key="index">
+                <div v-if="item.value.orderState===1">
+                    <div class="order-info">
+                        <p>
+                            <i class="fa fa-caret-down" @click="detailetShow(item)"></i>
+                        </p>
+                        <div class="order-info-right">
+                            <p>&#165;
+                                {{ item.orderTotal }}</p>
+                        </div>
                     </div>
                 </div>
                 <ul class="order-detailet" v-show="item.isShowDetailet">
@@ -119,7 +123,7 @@ export default {
     },
     setup() {
         const $getSessionStorage = inject('$getSessionStorage');
-        const orderArr = ref([]);
+        const orderArr = ref([{}]);
         const user = ref({});
         // const orderLoad = ref(false);
 
@@ -143,10 +147,10 @@ export default {
                 // console.log(result);
                 for (let orders of result) {
                     orders.isShowDetailet = false;
-                    // console.log(orders);
+                    console.log(orders);
                 }
                 orderArr.value = result;
-                // console.log(orderArr.value);
+                console.log(orderArr.value);
                 // console.log(orderArr);
                 // console.log(">>>>>>>>>>>>>>>");
 
@@ -254,4 +258,5 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}</style>
+}
+</style>

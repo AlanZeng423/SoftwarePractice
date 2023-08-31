@@ -24,7 +24,7 @@
             </li>
         </ul>
         <!-- 支付方式部分 -->
-        <ul class="payment-type">
+        <!-- <ul class="payment-type">
             <li>
                 <img src="../assets/alipay.png">
                 <i class="fa fa-check-circle"></i>
@@ -32,179 +32,96 @@
             <li>
                 <img src="../assets/wechat.png">
             </li>
+        </ul> -->
+        <ul class="payment-type">
+            <li @click="selectPayment('alipay')">
+                <img src="../assets/alipay.png">
+                <i class="fa fa-check-circle" v-if="selectedPayment == 'alipay'"></i>
+            </li>
+            <li @click="selectPayment('wechat')" >
+                <img src="../assets/wechat.png">
+                <i class="fa fa-check-circle" v-if="selectedPayment == 'wechat'"></i>
+            </li>
         </ul>
-        <div class="payment-button"> <button>确认支付</button>
+        <div class="payment-button" @click="toPayying"> <button>确认支付</button>
         </div>
         <!-- 底部菜单部分 -->
         <Footer></Footer>
     </div>
 </template>
 <script>
-// import Footer from '../components/Footer.vue';
-// export default {
-//     name: 'Payment',
-//     data() {
-//         return {
-//             orderId: this.$route.query.orderId,
-//             orders: {
-//                 business: {}
-//             },
-//             isShowDetailet: false
-//         }
-//     },
-//     created() {
-//         this.$axios.post('OrdersController/getOrdersById', this.$qs.stringify({
-//             orderId: this.orderId
-//         })).then(response => {
-//             this.orders = response.data;
-//         }).catch(error => {
-//             console.error(error);
-//         });
-//     },
-//     mounted() { //这里的代码是实现:一旦路由到在线支付组件，就不能回到订单确认组件。 //先将当前url添加到history对象中 history.pushState(null,null,document.URL); //popstate事件能够监听history对象的变化
-//         window.onpopstate = () => {
-//             this.$router.push({ path: '/index' });
-//         }
-//     },
-//     destroyed() {
-//         window.onpopstate = null;
-//     },
-//     methods: {
-//         detailetShow() {
-//             this.isShowDetailet = !this.isShowDetailet;
-//         }
-//     },
-//     components: {
-//         Footer
-//     }
-// }
+
 import { ref, onMounted, inject } from 'vue';
 import Footer from '../components/Footer.vue';
 import axios from 'axios';
 import qs from 'qs';
 import { useRoute, useRouter } from 'vue-router';
-// data(){
-//             return {
-//                 orderId:this.$route.query.orderId,
-//                 orders:{
-//                     business:{}
-//                 },
-//                 isShowDetailet:false
-//             }
-//         },
 
 export default {
     name: 'Payment',
-    components: {        
+    components: {
         Footer,
     },
-    setup(){
-        // const $getSessionStorage = inject('$getSessionStorage');
-        // const $setLocalStorage = inject('$setLocalStorage');
-        // const $getLocalStorage = inject('$getLocalStorage')
-        // const $removeLocalStorage = inject('$removeLocalStorage');
+    setup() {
         const route = useRoute();
         const router = useRouter();
         const orderId = ref(route.query.orderId);
         const orders = ref({
-                    business:{}
-                });
+            business: {},
+            // orderState: 0,
+        });
+        // const orders = ref({});
+        let selectedPayment = ref(null);
         const isShowDetailet = ref(false);
-            axios.post('OrdersController/getOrdersById',qs.stringify({
-                orderId:orderId.value
-            })).then(response=>{
-                orders.value = response.data;
-            }).catch(error=>{
-                console.error(error);
-            });
+        axios.post('OrdersController/getOrdersById', qs.stringify({
+            orderId: orderId.value
+        })).then(response => {
+            orders.value = response.data;
+        }).catch(error => {
+            console.error(error);
+        });
 
-            onMounted(()=>{
-                window.onpopstate = () => {
-                    router.push({path:'/index'});
-            }
-            
-        
-            });
+        const selectPayment = (paymentType) => {
+            selectedPayment.value = paymentType;
+        }
 
-            const destroyed=()=>{
-                window.onpopstate = null;
-            }
-            const detailetShow = () => {
-                isShowDetailet.value = !isShowDetailet.value;
+
+        onMounted(() => {
+            window.onpopstate = () => {
+                router.push({ path: '/index' });
             }
 
-            return{
-                orderId,
-                orders,
-                isShowDetailet,
-                destroyed,
-                detailetShow
-            };
+
+        });
+
+        const destroyed = () => {
+            window.onpopstate = null;
+        }
+        const detailetShow = () => {
+            isShowDetailet.value = !isShowDetailet.value;
+        }
+        const toPayying = () => {
+            router.push({ path: '/paying', query: { orderId: orderId.value } });
+            // orders.orderState = 1;
+            // console.log(orders);
+            // console.log(orders.orderState);
+        }
+
+        // const 
+
+        return {
+            orderId,
+            orders,
+            isShowDetailet,
+            destroyed,
+            detailetShow,
+            toPayying,
+            selectedPayment,
+            selectPayment
+        };
+    }
 }
-}
 
-
-// export default {
-//     name: 'Payment',
-//     components: {
-//         Footer,
-//     },
-//     setup() {
-//         const route = useRoute();
-//         const router = useRouter();
-//         const orderId = ref(route.query.orderId)
-//         const orders = ref({
-//             business: {},
-//         });
-//         const isShowDetailet = ref(false);
-
-//         const getOrdersById = async () => {
-            
-//                 axios.post('OrdersController/getOrdersById', qs.stringify({
-//                     orderId: orderId,
-//                 })).then(response => {
-//                     orders.value = response.data;
-//                 }).catch(error => {
-//                     console.error(error);
-//             });
-                
-//             } 
-        
-
-//         const detailetShow = () => {
-//             isShowDetailet.value = !isShowDetailet.value;
-//         }
-
-//         const handlePopstate = () => {
-//             // 当页面返回时，跳转到首页
-//             router.push('/index');
-//         };
-
-//         onMounted(() => {
-//             // 将当前 URL 添加到 history 中
-//             history.pushState(null, null, document.URL);
-
-//             // 监听 popstate 事件
-//             window.addEventListener('popstate', handlePopstate);
-
-//             // 获取订单信息
-//             getOrdersById();
-//         });
-
-//         onBeforeUnmount(() => {
-//             // 移除 popstate 事件监听
-//             window.removeEventListener('popstate', handlePopstate);
-//         });
-
-//         return {
-//             orders,
-//             isShowDetailet,
-//             detailetShow,
-//             getOrdersById,
-//             detailetShow
-//         };
-//     },
-// };
 </script>
 <style scoped>
 /****************** 总容器 ******************/
