@@ -32,11 +32,13 @@
             <p>可用积分为：{{user.point}}</p>
             <button @click="toggleUsePoints">{{ usePoints ? '取消使用积分' : '使用积分' }}</button>
         </div>
-
-
+        <div class="order-deliveryfee">
+        <input type="range" min="0" :max="maxPointsUsing" step="100" v-model="usePointsNum">
+        <p>选择使用积分数量: {{ usePointsNum }}</p>
+        </div>
         <div class="order-deliveryfee">
             <p>积分抵扣金额为</p>
-            <p>&#165{{ discountNum }}</p>
+            <p>&#165{{ usePointsNum/100 }}</p>
         </div>
 
         
@@ -82,9 +84,7 @@ export default {
         //新增的积分部分
         const usePoints = ref(false);// 默认不使用积分
         const usePointsNum = ref(0);//使用积分的数量
-        const discountNum = ref(0);
-        
-
+        const maxPointsUsing = ref(0);//最大可用积分数量（每满100可以使用100积分）
 
         onMounted(()=> {
             user.value = $getSessionStorage('user');
@@ -130,7 +130,7 @@ export default {
             })).then(response => {
                 let orderId = response.data;
                 if (orderId > 0) {
-                    router.push({ path: '/payment', query: {orderId: orderId, discountNum: discountNum.value}});
+                    router.push({ path: '/payment', query: {orderId: orderId, discountNum: usePointsNum.value/100}});
                 } else {
                     alert('创建订单失败!');
                 }
@@ -138,6 +138,7 @@ export default {
                 console.error(error);
             });
         }
+        
         const totalPrice = computed(() => {
             let totalPrice = 0;
             for (let cartItem of cartArr.value) {
@@ -146,18 +147,23 @@ export default {
                 totalPrice += business.value.deliveryPrice;
                 if(usePoints.value){
                     if(user.value.point/100 <= totalPrice){
-                        discountNum.value = user.value.point/100;
+                        maxPointsUsing.value = user.value.point - user.value.point%100;
                     }
                     else{
-                        discountNum.value = totalPrice;
+                        maxPointsUsing.value = (totalPrice-totalPrice%1)*100;
                     }
-                    
-                    totalPrice -= discountNum.value;
+                    totalPrice = totalPrice - usePointsNum.value/100;
                 }
                 //if()//在这个地方要判断是否使用积分
                 return totalPrice;
             });
 
+        const finalPrice = computed(() =>{
+            if(usePoints.value){
+                finalPrice = totalPrice - usePointsNum/100;
+            }
+            return finalPrice;
+        });
         const sexFilters = (value) => {
             return value === 1 ? '先生' : '女士';
             
@@ -171,7 +177,8 @@ export default {
             deliveryaddress,
             usePoints,
             totalPrice,
-            discountNum,
+            usePointsNum,
+            maxPointsUsing,
             toPayment,
             toUserAddress,
             toggleUsePoints
