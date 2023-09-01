@@ -120,4 +120,18 @@ public class OrdersServiceImpl implements OrdersService{
         }
         return list;
     }
+
+    public int updateOrder(int orderId, int orderState){
+        int result = 0;
+        OrdersDao dao = new OrdersDaoImpl();
+        try{
+            DBUtil.getConnection();
+            result = dao.updateOrder(orderId,orderState);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DBUtil.close();
+        }
+        return result;
+    }
 }

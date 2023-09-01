@@ -115,4 +115,19 @@ public class OrdersDaoImpl implements OrdersDao{
         }
         return list;
     }
+
+    public int updateOrder(int orderId, int orderState) throws Exception{
+        int result = 0;
+        String sql = "update orders set orderState = ? where orderId = ?";
+        try{
+            con = DBUtil.getConnection();
+            pst = con.prepareStatement(sql);
+            pst.setInt(1,orderState);
+            pst.setInt(2,orderId);
+            result = pst.executeUpdate();
+        }finally {
+            DBUtil.close(rs,pst);
+        }
+        return result;
+    }
 }

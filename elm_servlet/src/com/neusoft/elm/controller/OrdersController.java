@@ -28,4 +28,12 @@ public class OrdersController {
         List<Orders> list = service.listOrdersByUserId(userId);
         return list;
     }
+
+    public Object updateOrder(HttpServletRequest request) throws Exception{
+        int orderState = Integer.parseInt(request.getParameter("orderState"));
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+        OrdersService service = new OrdersServiceImpl();
+        int result = service.updateOrder(orderId,orderState);
+        return result;
+    }
 }

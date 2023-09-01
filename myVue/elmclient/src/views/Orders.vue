@@ -29,10 +29,10 @@
         </div>
 
         <div class="order-deliveryfee">
-            <p>可用积分为：{{user.point}}</p>
+            <p>可用积分为：{{point}}</p>
             <button @click="toggleUsePoints">{{ usePoints ? '取消使用积分' : '使用积分' }}</button>
         </div>
-        <div class="order-deliveryfee">
+        <div class="order-deliveryfee" v-if="usePoints">
         <input type="range" min="0" :max="maxPointsUsing" step="100" v-model="usePointsNum">
         <p>选择使用积分数量: {{ usePointsNum }}</p>
         </div>
@@ -76,7 +76,6 @@ export default {
         // const user = ref({});
         const user = ref({
             gender: 1,
-            point: 0
         });
         const cartArr = ref([]);
         const deliveryaddress = ref([]);
@@ -85,6 +84,7 @@ export default {
         const usePoints = ref(false);// 默认不使用积分
         const usePointsNum = ref(0);//使用积分的数量
         const maxPointsUsing = ref(0);//最大可用积分数量（每满100可以使用100积分）
+        const point = ref(0);
 
         onMounted(()=> {
             user.value = $getSessionStorage('user');
@@ -106,8 +106,14 @@ export default {
             }).catch(error => {
                 console.error(error);
             });
-
-
+            //查询当前用户的积分数量
+            axios.post('UserController/getPointById', qs.stringify({
+                userId: user.value.userId
+            })).then(response =>{
+                point.value = response.data;
+            }).catch(error => {
+                console.error(error);
+            });
         })
 
         const toggleUsePoints = () =>{
@@ -130,7 +136,10 @@ export default {
             })).then(response => {
                 let orderId = response.data;
                 if (orderId > 0) {
-                    router.push({ path: '/payment', query: {orderId: orderId, discountNum: usePointsNum.value/100}});
+                    router.push({ path: '/payment', query: {
+                        orderId: orderId, 
+                        discountNum: usePointsNum.value/100,
+                        point: point.value}});
                 } else {
                     alert('创建订单失败!');
                 }
@@ -146,8 +155,8 @@ export default {
                 }
                 totalPrice += business.value.deliveryPrice;
                 if(usePoints.value){
-                    if(user.value.point/100 <= totalPrice){
-                        maxPointsUsing.value = user.value.point - user.value.point%100;
+                    if(point.value/100 <= totalPrice){
+                        maxPointsUsing.value = point.value - point.value%100;
                     }
                     else{
                         maxPointsUsing.value = (totalPrice-totalPrice%1)*100;
@@ -158,12 +167,6 @@ export default {
                 return totalPrice;
             });
 
-        const finalPrice = computed(() =>{
-            if(usePoints.value){
-                finalPrice = totalPrice - usePointsNum/100;
-            }
-            return finalPrice;
-        });
         const sexFilters = (value) => {
             return value === 1 ? '先生' : '女士';
             
@@ -179,6 +182,7 @@ export default {
             totalPrice,
             usePointsNum,
             maxPointsUsing,
+            point,
             toPayment,
             toUserAddress,
             toggleUsePoints

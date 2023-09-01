@@ -75,4 +75,35 @@ public class UserDaoImpl implements UserDao{
         }
         return result;
     }
+    @Override
+    public int updatePoint(String userId, double point) throws Exception {
+        int result = 0;
+        String sql = "update user set point = ? where userId = ?";
+        try{
+            con = DBUtil.getConnection();
+            pst = con.prepareStatement(sql);
+            pst.setDouble(1,point);
+            pst.setString(2,userId);
+            result = pst.executeUpdate();
+        }finally {
+            DBUtil.close(rs,pst);
+        }
+        return result;
+    }
+    public double getPointById(String userId) throws Exception{
+        double result = 0;
+        String sql = "select point from user where userId = ?";
+        try{
+            con = DBUtil.getConnection();
+            pst = con.prepareStatement(sql);
+            pst.setString(1,userId);
+            rs = pst.executeQuery();
+            if(rs.next()) {
+                result = rs.getDouble(1);
+            }
+        }finally {
+            DBUtil.close(rs,pst);
+        }
+        return result;
+    }
 }

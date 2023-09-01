@@ -30,4 +30,20 @@ public class UserController {
         int result = service.saveUser(user);
         return result;
     }
+
+    //关于对积分的更新情况，只有成功购物之后才会更新（包括了对积分的增加和减少）
+    public Object updatePoint(HttpServletRequest request) throws Exception{
+        String userId = request.getParameter("userId");
+        double point = Double.parseDouble(request.getParameter("point"));
+        UserService service = new UserServiceImpl();
+        int result = service.updatePoint(userId,point);
+        return result;
+    }
+
+    public Object getPointById(HttpServletRequest request) throws Exception{
+        String userId = request.getParameter("userId");
+        UserService service = new UserServiceImpl();
+        double result = service.getPointById(userId);
+        return result;
+    }
 }

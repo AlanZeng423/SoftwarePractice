@@ -49,4 +49,31 @@ public class UserServiceImpl implements UserService{
         }
         return result;
     }
+    @Override
+    public int updatePoint(String userId, double point){
+        int result = 0;
+        UserDao dao = new UserDaoImpl();
+        try {
+            DBUtil.getConnection();
+            result = dao.updatePoint(userId, point);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            DBUtil.close();
+        }
+        return result;
+    }
+    public double getPointById(String userId){
+        double result = 0;
+        UserDao dao = new UserDaoImpl();
+        try{
+            DBUtil.getConnection();
+            result = dao.getPointById(userId);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            DBUtil.close();
+        }
+        return result;
+    }
 }

@@ -2,39 +2,49 @@
     <div class="wrapper">
         <!-- header部分 -->
         <header>
-            <p>在线支付</p>
+            <p>在线支付</p >
         </header>
         <!-- 订单信息部分 -->
         <h3>订单信息:</h3>
         <div class="order-info">
             <p>
                 <i class="fa fa-caret-down" @click="detailetShow"></i>
-            </p>
-            <p>&#165;{{ orders.orderTotal }}</p>
+            </p >
+            <p>&#165;{{ orders.orderTotal }}</p >
         </div>
         <!-- 订单明细部分 -->
         <ul class="order-detailet" v-show="isShowDetailet">
             <li v-for="item in orders.list">
-                <p>{{ item.food.foodName }} x {{ item.quantity }}</p>
-                <p>&#165;{{ item.food.foodPrice * item.quantity }}</p>
+                <p>{{ item.food.foodName }} x {{ item.quantity }}</p >
+                <p>&#165;{{ item.food.foodPrice * item.quantity }}</p >
             </li>
             <li>
-                <p>配送费</p>
-                <p>&#165;{{ orders.business.deliveryPrice }}</p>
+                <p>配送费</p >
+                <p>&#165;{{ orders.business.deliveryPrice }}</p >
             </li>
             <li>
-                <p>积分抵扣金额</p>
-                <p>&#165;{{ discountNum }}</p>
+                <p>积分抵扣</p>
+                <p>-&#165;{{discountNum}}</p>
             </li>
         </ul>
         <!-- 支付方式部分 -->
-        <ul class="payment-type">
+        <!-- <ul class="payment-type">
             <li>
-                <img src="../assets/alipay.png">
+                < img src="../assets/alipay.png">
                 <i class="fa fa-check-circle"></i>
             </li>
             <li>
+                < img src="../assets/wechat.png">
+            </li>
+        </ul> -->
+        <ul class="payment-type">
+            <li @click="selectPayment('alipay')">
+                <img src="../assets/alipay.png">
+                <i class="fa fa-check-circle" v-if="selectedPayment == 'alipay'"></i>
+            </li>
+            <li @click="selectPayment('wechat')" >
                 <img src="../assets/wechat.png">
+                <i class="fa fa-check-circle" v-if="selectedPayment == 'wechat'"></i>
             </li>
         </ul>
         <div class="payment-button" @click="toPayying"> <button>确认支付</button>
@@ -53,54 +63,77 @@ import { useRoute, useRouter } from 'vue-router';
 
 export default {
     name: 'Payment',
-    components: {        
+    components: {
         Footer,
     },
-    setup(){
+    setup() {
         const route = useRoute();
         const router = useRouter();
         const orderId = ref(route.query.orderId);
-        const discountNum = ref(route.query.discountNum);
+        const point = ref(route.query.point)
         const orders = ref({
-                    business:{}
-                });
+            business: {},
+            // orderState: 0,
+        });
+        // const orders = ref({});
+        let selectedPayment = ref(null);
         const isShowDetailet = ref(false);
-            axios.post('OrdersController/getOrdersById',qs.stringify({
-                orderId:orderId.value
-            })).then(response=>{
-                orders.value = response.data;
-            }).catch(error=>{
-                console.error(error);
-            });
+        const discountNum = ref(route.query.discountNum);
 
-            onMounted(()=>{
-                window.onpopstate = () => {
-                    router.push({path:'/index'});
-            }
-            
-        
-            });
 
-            const destroyed=()=>{
-                window.onpopstate = null;
-            }
-            const detailetShow = () => {
-                isShowDetailet.value = !isShowDetailet.value;
-            }
-            const toPayying = () =>{
-                router.push({ path: '/Payying'});
+
+        axios.post('OrdersController/getOrdersById', qs.stringify({
+            orderId: orderId.value
+        })).then(response => {
+            orders.value = response.data;
+        }).catch(error => {
+            console.error(error);
+        });
+
+        const selectPayment = (paymentType) => {
+            selectedPayment.value = paymentType;
+        }
+
+
+        onMounted(() => {
+            window.onpopstate = () => {
+                router.push({ path: '/index' });
             }
 
-            return{
-                orderId,
-                orders,
-                isShowDetailet,
-                discountNum,
-                destroyed,
-                detailetShow,
-                toPayying
-            };
-}
+
+        });
+
+        const destroyed = () => {
+            window.onpopstate = null;
+        }
+        const detailetShow = () => {
+            isShowDetailet.value = !isShowDetailet.value;
+        }
+
+        const toPayying = () => {
+            router.push({ path: '/paying', query: { 
+                orderId: orderId.value,
+                discountNum: discountNum.value,
+                totalPrice:orders.value.orderTotal,
+                point:point.value
+            }});
+        }
+
+        // const 
+
+        return {
+            orderId,
+            orders,
+            isShowDetailet,
+            discountNum,
+            selectedPayment,
+            point,
+            destroyed,
+            detailetShow,
+            toPayying,
+            selectPayment
+        };
+    }
 }
 
 </script>

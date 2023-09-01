@@ -5,4 +5,6 @@ public interface OrdersService {
     public int createOrders(String userId,Integer businessId,Integer daId,Double orderTotal);
     public Orders getOrdersById(Integer orderId);
     public List<Orders> listOrdersByUserId(String userId);
+
+    int updateOrder(int orderId, int orderState);
 }

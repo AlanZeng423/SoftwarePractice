@@ -5,4 +5,6 @@ public interface OrdersDao {
     public int saveOrders(Orders orders) throws Exception;
     public Orders getOrdersById(Integer orderId) throws Exception;
     public List<Orders> listOrdersByUserId(String userId) throws Exception;
+
+    int updateOrder(int orderId, int orderState) throws Exception;
 }
