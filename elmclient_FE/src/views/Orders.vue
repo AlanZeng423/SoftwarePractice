@@ -29,19 +29,19 @@
         </div>
 
         <div class="order-deliveryfee">
-            <p>可用积分为：{{user.point}}</p>
-            <div class="container">
-                <button class="Button" @click="toggleUsePoints">{{ usePoints ? '取消使用积分' : '使用积分' }}</button>
-            </div>
-            
+            <p>可用积分为：{{ point }}</p>
+            <button @click="toggleUsePoints">{{ usePoints ? '取消使用积分' : '使用积分' }}</button>
         </div>
-
+        <div class="order-deliveryfee" v-if="usePoints">
+            <input type="range" min="0" :max="maxPointsUsing" step="100" v-model="usePointsNum">
+            <p>选择使用积分数量: {{ usePointsNum }}</p>
+        </div>
         <div class="order-deliveryfee">
             <p>积分抵扣金额为</p>
-            <p>&#165{{ discountNum }}</p>
+            <p>&#165{{ usePointsNum / 100 }}</p>
         </div>
 
-        
+
 
         <!-- 合计部分 -->
         <div class="total">
@@ -76,16 +76,17 @@ export default {
         // const user = ref({});
         const user = ref({
             gender: 1,
-            point: 0
         });
         const cartArr = ref([]);
         const deliveryaddress = ref([]);
 
         //新增的积分部分
         const usePoints = ref(false);// 默认不使用积分
-        const discountNum = ref(0);
-        
-        onMounted(()=> {
+        const usePointsNum = ref(0);//使用积分的数量
+        const maxPointsUsing = ref(0);//最大可用积分数量（每满100可以使用100积分）
+        const point = ref(0);
+
+        onMounted(() => {
             user.value = $getSessionStorage('user');
             deliveryaddress.value = $getLocalStorage(user.value.userId);
             //查询当前商家
@@ -105,11 +106,17 @@ export default {
             }).catch(error => {
                 console.error(error);
             });
-
-
+            //查询当前用户的积分数量
+            axios.post('UserController/getPointById', qs.stringify({
+                userId: user.value.userId
+            })).then(response => {
+                point.value = response.data;
+            }).catch(error => {
+                console.error(error);
+            });
         })
 
-        const toggleUsePoints = () =>{
+        const toggleUsePoints = () => {
             usePoints.value = !usePoints.value;
         }
         const toUserAddress = () => {
@@ -129,7 +136,13 @@ export default {
             })).then(response => {
                 let orderId = response.data;
                 if (orderId > 0) {
-                    router.push({ path: '/payment', query: { orderId: orderId } });
+                    router.push({
+                        path: '/payment', query: {
+                            orderId: orderId,
+                            discountNum: usePointsNum.value / 100,
+                            point: point.value
+                        }
+                    });
                 } else {
                     alert('创建订单失败!');
                 }
@@ -137,29 +150,29 @@ export default {
                 console.error(error);
             });
         }
+
         const totalPrice = computed(() => {
             let totalPrice = 0;
             for (let cartItem of cartArr.value) {
-                    totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+                totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+            }
+            totalPrice += business.value.deliveryPrice;
+            if (usePoints.value) {
+                if (point.value / 100 <= totalPrice) {
+                    maxPointsUsing.value = point.value - point.value % 100;
                 }
-                totalPrice += business.value.deliveryPrice;
-                if(usePoints.value){
-                    if(user.value.point/100 <= totalPrice){
-                        discountNum.value = user.value.point/100;
-                    }
-                    else{
-                        discountNum.value = totalPrice;
-                    }
-                    
-                    totalPrice -= discountNum.value;
+                else {
+                    maxPointsUsing.value = (totalPrice - totalPrice % 1) * 100;
                 }
-                //if()//在这个地方要判断是否使用积分
-                return totalPrice;
-            });
+                totalPrice = totalPrice - usePointsNum.value / 100;
+            }
+            //if()//在这个地方要判断是否使用积分
+            return totalPrice;
+        });
 
         const sexFilters = (value) => {
             return value === 1 ? '先生' : '女士';
-            
+
         }
 
         return {
@@ -168,18 +181,18 @@ export default {
             user,
             cartArr,
             deliveryaddress,
+            usePoints,
+            totalPrice,
+            usePointsNum,
+            maxPointsUsing,
+            point,
             toPayment,
             toUserAddress,
-            totalPrice,
-            toggleUsePoints,
-            usePoints,
-            discountNum,
-            sexFilters
-
+            toggleUsePoints
         };
     }
 }
-    
+
 
 </script>
 <style scoped>
@@ -299,6 +312,7 @@ export default {
     align-items: center;
     font-size: 3.5vw;
 }
+
 .wrapper .order-point {
     width: 100%;
     height: 20vw;
@@ -310,6 +324,7 @@ export default {
     align-items: center;
     font-size: 3.5vw;
 }
+
 /****************** 订单合计部分 ******************/
 .wrapper .total {
     width: 100%;
@@ -343,32 +358,4 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-
-}
-
-.container {
-    margin: 20px;
-    background-color: #ffa7a7;
-    /* display: flex; */
-    /* justify-content: center;
-    align-items: center; */
-    /* height: 100vh; */
-    /* 垂直方向上铺满整个视口高度 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 3px;
-}
-
-.Button {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: transparent;
-    border: none;
-    color: #fc0505;
-    font-size: 15px;
-    /* text-decoration: underline; */
-    cursor: pointer;
-    text-align: center;
-}
-</style>
+}</style>

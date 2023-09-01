@@ -32,51 +32,8 @@
         <Footer></Footer>
     </div>
 </template>
-<script>
-// import Footer from '../components/Footer.vue';
-// export default {
-//     name: 'Login',
-//     data() {
-//         return {
-//             userId: '',
-//             password: ''
-//         }
-//     }, methods: {
 
-//         login() {
-//             if (this.userId == '') {
-//                 alert('手机号码不能为空!');
-//                 return;
-//             }
-//             if (this.password == '') {
-//                 alert('密码不能为空!'); return;
-//             }
-//             //登录请求 
-//             this.$axios.post('UserController/getUserByIdByPass', this.$qs.stringify({
-//                 userId: this.userId,
-//                 password: this.password
-//             })).then(response => {
-//                 let user = response.data;
-//                 if (user == null) {
-//                     alert('用户名或密码不正确!');
-//                 } else {
-//                     //sessionstorage有容量限制，为了防止数据溢出，所以不将userImg数据放入session中
-//                     user.userImg = '';
-//                     this.$setSessionStorage('user', user);
-//                     this.$router.go(-1);
-//                 }
-//             }).catch(error => {
-//                 console.error(error);
-//             });
-//         },
-//         register() {
-//             this.$router.push({ path: 'register' });
-//         },
-//         components: {
-//             Footer
-//         }
-//     }
-// }
+<script>
 import { ref, onMounted, inject, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios'; // 添加这一行来引入 axios
@@ -116,11 +73,17 @@ export default {
                 }))
                 .then(response => {
                     const user = response.data;
-                    if (user === null) {
+                    console.log(user);
+                    console.log(user=='');
+                    if (user == null || user == '') {
+                        //failed
+                        //P3 : null
+                        //P4 : ''
                         alert('用户名或密码不正确!');
                     } else {
                         // user.userImg = ;
                         sessionStorage.setItem('user', JSON.stringify(user));
+                        console.log(user);
                         router.go(-1);
                     }
                 })

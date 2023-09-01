@@ -1,90 +1,38 @@
-<!-- <template>
-    <div class="wrapper"> 
-        <header>
-            <p>我的信息</p>
-        </header>
-        <h3>头像:</h3>
-        
-        <img src="../assets/alipay.png">
-        UserInfoPage
-    <Footer></Footer>
-</div>
-    
-</template>
-
-<script>
-import { ref, onMounted, inject } from 'vue';
-import Footer from '../components/Footer.vue';
-import axios from 'axios';
-import qs from 'qs';
-import { useRoute, useRouter } from 'vue-router';
-
-export default{
-    name: 'UserInfo',
-    components: {
-        Footer,
-    },
-    setup(){
-
-    },
-    // return{
-
-    // };
-}
-</script>
-
-<style>
-.wrapper {
-    width: 100%;
-    height: 100%;
-    background-color: #fefefe;
-}
-
-.wrapper header {
-    width: 100%;
-    height: 12vw;
-    background-color: #0097FF;
-    color: #fff;
-    font-size: 4.8vw;
-    /* position: fixed; */
-    left: 0;
-    top: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.wrapper h3 {
-    margin-top: 12vw;
-    box-sizing: border-box;
-    padding: 4vw 4vw 0;
-    font-size: 4vw;
-    font-weight: 300;
-    color: #050505;
-}
-/*
-.wrapper  img {
-    width: 33vw;
-    height: 8.9vw; 
-}  */
-
-
-</style>
-
--->
-
-
 <template>
     <div class="wrapper">
         <header>
-            PAYING
+            我的信息
         </header>
-        <div class="container">
-            <button class="paying-button">
-                支付成功
-            </button>
+        <div class="profile-header">
+            <!-- <img src="../assets/alipay.png"> -->
+            <!-- <img class="profile-picture" src="../assets/userImg/yhtx01.png" alt="UserImg" /> -->
+            <img class="profile-picture" :src="user.userImg" alt="UserImg" />
+            <!-- <img :src="item.businessImg"> -->
+            <h1>{{ user.name }}</h1>
+            <p>{{ user.bio }}</p>
         </div>
+        <div class="profile-details">
+
+            <div class="detail-item">
+                <strong>账号：</strong>{{ user.userId }}
+            </div>
+            <div class="detail-item">
+                <strong>昵称：</strong>{{ user.userName }}
+            </div>
+            <div class="detail-item">
+                <strong>性别：</strong>{{ convertGenderText(user.userSex) }}
+                <!-- {{ getUserGenderText(user.gender) }} -->
+            </div>
+            <div class="detail-item">
+                <strong>积分：</strong>{{ user.point }}
+            </div>
+
+
+        </div>
+        <div class="container">
+            <button class="logout-Button" @click="logout">退出登录</button>
+        </div>
+        
         <Footer></Footer>
     </div>
 </template>
@@ -98,7 +46,7 @@ import axios from 'axios';
 import qs from 'qs';
 import { useRoute, useRouter } from 'vue-router';
 export default {
-    name: 'Paying',
+    name: 'UserInfo',
     components: {
         Footer,
     },
@@ -203,7 +151,7 @@ export default {
     border-radius: 3px;
 }
 
-.paying-button {
+.logout-Button {
     display: inline-block;
     padding: 0.5rem 1rem;
     background-color: transparent;
