@@ -25,4 +25,9 @@ public class OrdersController {
  public List<Orders> listOrdersByUserId(Orders orders) throws Exception{
  return ordersService.listOrdersByUserId(orders.getUserId());
  }
+
+ @RequestMapping("/updateOrder")
+ public int updateOrder(Orders orders) throws Exception{
+  return ordersService.updateOrder(orders.getOrderId(),orders.getOrderState());
+ }
 }

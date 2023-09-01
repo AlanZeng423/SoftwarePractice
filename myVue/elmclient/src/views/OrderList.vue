@@ -8,8 +8,8 @@
         <!-- 订单列表部分 -->
         <h3>未支付订单信息:</h3>
         <ul class="order" >
-            <li v-for="item in orderArr" v-if="tem.orderState==0">
-                <div class="order-info">
+            <li v-for="item in orderArr" >
+                <div class="order-info" v-if="item.orderState === 0">
                     <p>
                         {{ item.business.businessName }}
                         <i class="fa fa-caret-down" @click="detailetShow(item)"></i>
@@ -19,7 +19,7 @@
                         <div class="order-info-right-icon">去支付</div>
                     </div>
                 </div>
-                <ul class="order-detailet" v-show="item.isShowDetailet">
+                <ul class="order-detailet" v-show="item.isShowDetailet" v-if="item.orderState === 0">
                     <li v-for="odItem in item.list">
                         <p>{{ odItem.food.foodName }} x {{ odItem.quantity }}</p>
                         <p>&#165;{{ odItem.food.foodPrice * odItem.quantity }}</p>
@@ -33,9 +33,10 @@
         </ul>
         <h3>已支付订单信息:</h3>
         <ul class="order">
-            <li v-for="item in orderArr" v-if="item.orderState==1">
-                <div class="order-info">
+            <li v-for="item in orderArr" >
+                <div class="order-info" v-if="item.orderState == 1">
                     <p>
+                        {{ item.business.businessName }}
                         <i class="fa fa-caret-down" @click="detailetShow(item)"></i>
                     </p>
                     <div class="order-info-right">
@@ -43,7 +44,7 @@
                             {{ item.orderTotal }}</p>
                     </div>
                 </div>
-                <ul class="order-detailet" v-show="item.isShowDetailet">
+                <ul class="order-detailet" v-show="item.isShowDetailet" v-if="item.orderState == 1">
                     <li v-for="odItem in item.list">
                         <p>{{ odItem.food.foodName }} x {{ odItem.quantity }}</p>
                         <p>&#165;{{ odItem.food.foodPrice * odItem.quantity }}</p>
@@ -61,38 +62,6 @@
     </div>
 </template>
 <script>
-// import Footer from '../components/Footer.vue';
-// export default {
-//     name: 'OrderList',
-//     data() {
-//         return {
-//             orderArr: [],
-//             user: {}
-//         }
-//     },
-//     created() {
-//         this.user = this.$getSessionStorage('user');
-//         this.$axios.post('OrdersController/listOrdersByUserId', this.$qs.stringify({
-//             userId: this.user.userId
-//         })).then(response => {
-//             let result = response.data;
-//             for (let orders of result) {
-//                 orders.isShowDetailet = false;
-//             }
-//             this.orderArr = result;
-//         }).catch(error => {
-//             console.error(error);
-//         });
-//     }, methods: {
-//         detailetShow(orders) {
-//             orders.isShowDetailet = !orders.isShowDetailet;
-//         }
-//     },
-//     components: {
-//         Footer
-//     }
-// }
-
 
 import { ref, onMounted, inject } from 'vue';
 import Footer from '../components/Footer.vue';
@@ -109,39 +78,21 @@ export default {
         const orderArr = ref([]);
         const user = ref({});
         const orderLoad= ref(false);
-        // const $axios = inject('$axios');
-        // const $qs = inject('$qs');
 
-        onMounted(async() => {
+        onMounted(() => {  
             user.value = $getSessionStorage('user');
 
             axios.post('OrdersController/listOrdersByUserId', qs.stringify({
                 userId: user.value.userId
             })).then(response => {
-                // console.log(response.data);
-                    // const result = response.data.map(order => {
-                    //     return { ...order, isShowDetailet: false };
-                    // });
-                    // orderArr.value = result;
-                //orderArr.value = response.data;
                 let result = response.data;
-                // console.log(result);
-                for(let orders of result) {
-                    orders.isShowDetailet = false;    
-                    //console.log(orders);
+                for (let orders of result) {
+                    orders.isShowDetailet = false;
                 }
-                    orderArr.value = result;
-                    // console.log(orderArr.value);
-                    // console.log(orderArr);
-                    // console.log(">>>>>>>>>>>>>>>");
-                    // orderLoad.value = true;
-                    // for(let i of orderArr.value){
-                    //     console.log(i.orderState);
-                    // }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+                orderArr.value = result;
+            }).catch(error => {
+                console.error(error);
+            });
         });
 
         const detailetShow = (order) => {

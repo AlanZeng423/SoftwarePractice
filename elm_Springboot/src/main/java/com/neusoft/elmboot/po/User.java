@@ -7,7 +7,7 @@ public class User {
     private Integer userSex;
     private String userImg;
     private Integer delTag;
-    private Integer point;
+    private double point;
 
     public String getUserId() {
         return userId;
@@ -51,10 +51,10 @@ public class User {
         this.delTag = delTag;
     }
 
-    public Integer getPoint() {
+    public double getPoint() {
         return point;
     }
-    public void setPoint(Integer point){
+    public void setPoint(double point){
         this.point = point;
     }
     //get、set ... ...

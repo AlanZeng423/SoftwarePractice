@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 
 import com.neusoft.elmboot.po.Orders;
+import org.apache.ibatis.annotations.Update;
+
 @Mapper
 public interface OrdersMapper {
 	@Insert("insert into orders(userId,businessId,orderDate,orderTotal,daId,orderState) values(#{userId},#{businessId},#{orderDate},#{orderTotal},#{daId},0)")
@@ -15,4 +17,7 @@ public interface OrdersMapper {
 	
 	public Orders getOrdersById(Integer orderId) ;
 	public List<Orders> listOrdersByUserId(String userId);
+
+	@Update("update orders set orderState = #{orderState} where orderId = #{orderId}")
+    public int updateOrder(Integer orderId, Integer orderState);
 }

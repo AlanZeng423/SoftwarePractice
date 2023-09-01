@@ -83,19 +83,6 @@ export default {
             updatePoint
         }
     }
-
-    // return {
-    //     user: {
-    //         name: 'John Doe',
-    //         username: 'johndoe123',
-    //         email: 'johndoe@example.com',
-    //         gender: '男',
-    //         birthdate: '1990-01-01',
-    //         bio: '喜欢编程和旅行的前端工程师。',
-    //         avatar: 'profile.jpg'
-    //     }
-
-
 };
 </script>
 

@@ -25,7 +25,11 @@ public class UserServiceImpl implements UserService{
  return userMapper.saveUser(user);
  }
 
- public int updatePoints(User user){
-  return userMapper.updatePoints(user);
+ public int updatePoint(User user){
+  return userMapper.updatePoint(user);
+ }
+
+ public double getPointById(String userId){
+  return userMapper.getPointById(userId);
  }
 }

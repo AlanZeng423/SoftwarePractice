@@ -62,4 +62,8 @@ public class OrdersServiceImpl implements OrdersService{
  public List<Orders> listOrdersByUserId(String userId){
  return ordersMapper.listOrdersByUserId(userId);
  }
+
+ public int updateOrder(Integer orderId, Integer orderState){
+  return ordersMapper.updateOrder(orderId,orderState);
+ }
 }

@@ -26,8 +26,12 @@ public class UserController {
  return userService.saveUser(user);
  }
  @RequestMapping("/updatePoint")
- public int updatePoints(User user)throws Exception{
-  return userService.updatePoints(user);
+ public int updatePoint(User user)throws Exception{
+  return userService.updatePoint(user);
  }
 
+ @RequestMapping("/getPointById")
+ public double getPointById(User user)throws Exception{
+  return userService.getPointById(user.getUserId());
+ }
 }

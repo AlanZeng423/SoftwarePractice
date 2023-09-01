@@ -18,5 +18,8 @@ public interface UserMapper {
  public int saveUser(User user);
 
  @Update("update user set point = #{point} where userId = #{userId}")
- public int updatePoints(User user);
+ public int updatePoint(User user);
+
+ @Select("select point from user where userId = #{userId}")
+ double getPointById(String userId);
 }
