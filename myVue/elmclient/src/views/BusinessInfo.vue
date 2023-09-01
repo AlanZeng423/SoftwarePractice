@@ -234,7 +234,8 @@ export default {
         router.push({
             path: '/orders',
             query: {
-                businessId: business.value.businessId
+                businessId: business.value.businessId,
+                orderId1 : 0,
             }
         });
     }

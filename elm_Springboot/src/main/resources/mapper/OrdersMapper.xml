@@ -18,10 +18,17 @@ column="businessId"/>
  select="com.neusoft.elmboot.mapper.OrderDetailetMapper.listOrderDetailetByOrderId"
 column="orderId"/> 
  </resultMap>
+
+
  <select id="getOrdersById" parameterType="Integer" resultMap="ordersResultMap">
- select * from orders where orderId=#{orderId}
- </select>
- 
+  select o.*, b.businessId as bbusinessId, b.businessName as bbusinessName, b.deliveryPrice as bdeliveryPrice
+  from orders o
+  left join business b on o.businessId = b.businessId
+  <where>
+  o.orderId=#{orderId}
+  </where>
+</select>
+
  <select id="listOrdersByUserId" parameterType="String" resultMap="ordersResultMap">
  select * from orders where userId=#{userId} order by orderId
  </select>

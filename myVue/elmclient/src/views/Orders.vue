@@ -72,10 +72,12 @@ export default {
         const router = useRouter();
         const route = useRoute();
         const businessId = ref(route.query.businessId);
+        const orderId1 = ref(route.query.orderId1)
         const business = ref({});
         // const user = ref({});
         const user = ref({
             gender: 1,
+            userId: 0,
         });
         const cartArr = ref([]);
         const deliveryaddress = ref([]);
@@ -88,6 +90,7 @@ export default {
 
         onMounted(()=> {
             user.value = $getSessionStorage('user');
+
             deliveryaddress.value = $getLocalStorage(user.value.userId);
             //查询当前商家
             axios.post('BusinessController/getBusinessById', qs.stringify({
@@ -128,24 +131,35 @@ export default {
                 return;
             }
             //创建订单 
-            axios.post('OrdersController/createOrders', qs.stringify({
+            if(orderId1.value != 0){
+                //老订单
+                router.push({ path: '/payment', query: {
+                    orderId: orderId1.value, 
+                    discountNum: usePointsNum.value/100,
+                    point: point.value}});
+            }
+            else{
+                //新订单
+                axios.post('OrdersController/createOrders', qs.stringify({
                 userId: user.value.userId,
                 businessId: businessId.value,
                 daId: deliveryaddress.value.daId,
                 orderTotal: totalPrice.value
-            })).then(response => {
-                let orderId = response.data;
-                if (orderId > 0) {
-                    router.push({ path: '/payment', query: {
-                        orderId: orderId, 
-                        discountNum: usePointsNum.value/100,
-                        point: point.value}});
-                } else {
-                    alert('创建订单失败!');
-                }
-            }).catch(error => {
-                console.error(error);
-            });
+                })).then(response => {
+                    let orderId = response.data;
+                    if (orderId > 0) {
+                        // router.push({path:'/'});
+                        router.push({ path: '/payment', query: {
+                            orderId: orderId, 
+                            discountNum: usePointsNum.value/100,
+                            point: point.value}});
+                    } else {
+                        alert('创建订单失败!');
+                    }
+                }).catch(error => {
+                    console.error(error);
+                });
+            }
         }
         
         const totalPrice = computed(() => {
@@ -183,6 +197,7 @@ export default {
             usePointsNum,
             maxPointsUsing,
             point,
+            orderId1,
             toPayment,
             toUserAddress,
             toggleUsePoints

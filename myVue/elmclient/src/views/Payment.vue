@@ -70,7 +70,9 @@ export default {
         const route = useRoute();
         const router = useRouter();
         const orderId = ref(route.query.orderId);
-        const point = ref(route.query.point)
+        const point = ref(route.query.point);
+        const discountNum = ref(route.query.discountNum);
+        const Selected = ref(false);
         const orders = ref({
             business: {},
             // orderState: 0,
@@ -78,29 +80,24 @@ export default {
         // const orders = ref({});
         let selectedPayment = ref(null);
         const isShowDetailet = ref(false);
-        const discountNum = ref(route.query.discountNum);
-
-
-
-        axios.post('OrdersController/getOrdersById', qs.stringify({
-            orderId: orderId.value
-        })).then(response => {
-            orders.value = response.data;
-        }).catch(error => {
-            console.error(error);
-        });
 
         const selectPayment = (paymentType) => {
             selectedPayment.value = paymentType;
+            Selected.value = true;
         }
-
 
         onMounted(() => {
             window.onpopstate = () => {
                 router.push({ path: '/index' });
             }
 
-
+            axios.post('OrdersController/getOrdersById', qs.stringify({
+                orderId: orderId.value
+            })).then(response => {
+                orders.value = response.data;
+            }).catch(error => {
+                console.error(error);
+            });
         });
 
         const destroyed = () => {
@@ -111,12 +108,18 @@ export default {
         }
 
         const toPayying = () => {
-            router.push({ path: '/paying', query: { 
-                orderId: orderId.value,
-                discountNum: discountNum.value,
-                totalPrice:orders.value.orderTotal,
-                point:point.value
-            }});
+            if(Selected.value){
+                router.push({ path: '/paying', query: { 
+                    orderId: orderId.value,
+                    discountNum: discountNum.value,
+                    totalPrice:orders.value.orderTotal,
+                    point:point.value
+                }});
+            }
+            else{
+                alert('请选择支付方式!');
+            }
+            
         }
 
         // const 
@@ -128,6 +131,7 @@ export default {
             discountNum,
             selectedPayment,
             point,
+            Selected,
             destroyed,
             detailetShow,
             toPayying,

@@ -16,12 +16,28 @@ column="businessId"/>
  
  </resultMap>
  <select id="listCart" parameterType="Cart" resultMap="cartResultMap">
- select * from cart
+ select c.*,
+        f.foodId as ffoodId,
+        f.foodName as ffoodName,
+        f.foodExplain as ffoodExplain,
+        f.foodImg as ffoodImg,
+        f.foodPrice as ffoodPrice,
+        f.businessId as fbusinessId,
+        f.remarks as fremarks,
+        b.businessId as bbusinessId,
+        b.businessName as bbusinessName,
+        b.businessAddress as bbusinessAddress,
+        b.businessExplain as bbusinessExplain,
+        b.businessImg as bbusinessImg,
+        b.orderTypeId as borderTypeId,
+        b.starPrice as bstarPrice,
+        b.deliveryPrice as bdeliveryPrice,
+        b.remarks as bremarks
+ from (cart c left join food f on c.foodId = f.foodId) left join business b on c.businessId = b.businessId
  <where>
- userId=#{userId}
+ c.userId=#{userId}
  <if test="businessId!=null and businessId!=''">
- and businessId=#{businessId}
-
+ and c.businessId=#{businessId}
  </if>
  </where>
  order by cartId
