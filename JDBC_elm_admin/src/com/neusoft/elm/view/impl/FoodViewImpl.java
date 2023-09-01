@@ -1,6 +1,7 @@
 package com.neusoft.elm.view.impl;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 import com.neusoft.elm.dao.FoodDao;
@@ -54,36 +55,43 @@ public class FoodViewImpl implements FoodView{
 			System.out.println("请选择要更新的食品编号：");
 			int foodId = input.nextInt();
 			Food food = dao.getFoodById(foodId);
-			System.out.println(food);
-			
-			String inputStr = "";
-			System.out.println("是否更新食品名称(y/n)：");
-			inputStr = input.next();
-			if(inputStr.equals("y")) {
-				System.out.println("请输入新的食品名称：");
-				food.setFoodName(input.next());
+
+			if(!Objects.equals(food.getBusinessId(), businessId)){
+				System.out.println("该食物所属商家"+food.getBusinessId()+",您没有权限修改该食物！！！");
+			}
+			else {
+				System.out.println(food);
+				String inputStr = "";
+				System.out.println("是否更新食品名称(y/n)：");
+				inputStr = input.next();
+				if(inputStr.equals("y")) {
+					System.out.println("请输入新的食品名称：");
+					food.setFoodName(input.next());
+				}
+
+				System.out.println("是否更新食品介绍(y/n)：");
+				inputStr = input.next();
+				if(inputStr.equals("y")) {
+					System.out.println("请输入新的食品介绍：");
+					food.setFoodExplain(input.next());
+				}
+
+				System.out.println("是否更新食品价格(y/n)：");
+				inputStr = input.next();
+				if(inputStr.equals("y")) {
+					System.out.println("请输入新的食品价格：");
+					food.setFoodPrice(input.nextDouble());
+				}
+
+				int result = dao.updateFood(food);
+				if(result>0) {
+					System.out.println("\n修改食品成功！\n");
+				}else {
+					System.out.println("\n修改食品失败！\n");
+				}
 			}
 			
-			System.out.println("是否更新食品介绍(y/n)：");
-			inputStr = input.next();
-			if(inputStr.equals("y")) {
-				System.out.println("请输入新的食品介绍：");
-				food.setFoodExplain(input.next());
-			}
-			
-			System.out.println("是否更新食品价格(y/n)：");
-			inputStr = input.next();
-			if(inputStr.equals("y")) {
-				System.out.println("请输入新的食品价格：");
-				food.setFoodPrice(input.nextDouble());
-			}
-			
-			int result = dao.updateFood(food);
-			if(result>0) {
-				System.out.println("\n修改食品成功！\n");
-			}else {
-				System.out.println("\n修改食品失败！\n");
-			}
+
 		}
 	}
 	
@@ -97,14 +105,19 @@ public class FoodViewImpl implements FoodView{
 		}else {
 			System.out.println("请选择要删除的食品编号：");
 			int foodId = input.nextInt();
-			
-			System.out.println("确认要删除吗(y/n)：");
-			if(input.next().equals("y")) {
-				int result = dao.removeFood(foodId);
-				if(result>0) {
-					System.out.println("\n删除食品成功！\n");
-				}else {
-					System.out.println("\n删除食品失败！\n");
+			Food food = dao.getFoodById(foodId);
+			if(!Objects.equals(food.getBusinessId(), businessId)){
+				System.out.println("该食物所属商家"+food.getBusinessId()+",您没有权限删除该食物！！！");
+			}
+			else {
+				System.out.println("确认要删除吗(y/n)：");
+				if (input.next().equals("y")) {
+					int result = dao.removeFood(foodId);
+					if (result > 0) {
+						System.out.println("\n删除食品成功！\n");
+					} else {
+						System.out.println("\n删除食品失败！\n");
+					}
 				}
 			}
 		}
