@@ -2,13 +2,16 @@
 ## 更新记录：
 #### 8.31 & 9.1
 1. 在User 的系列文件中更新了  
-    updatePoint——实现支付成功后对数据库中积分的更新  
-    getPointById——实现Orders页面对于积分的实时获取（因为只有在Login时会获取一次 DB 中User的数据，而point是需要实时更新的）
+    updatePoint ——实现支付成功后对数据库中积分的更新  
+    getPointById ——实现Orders页面对于积分的实时获取（因为只有在Login时会获取一次 DB 中User的数据，而point是需要实时更新的）
 2. 在Orders 的系列文件中更新了  
-    updateOrder——实现支付成功后对属性orderState的更新
-3. 对xml文件中部分 SQL 操作进行更新
+    updateOrder ——实现支付成功后对属性orderState的更新
+3. 对xml文件中部分 SQL 操作进行更新(于9.2来看，似乎没有什么必要)  
     CartMapper中更新listCart的查询
     OrdersMapper中更新getOrdersById的查询
+#### 9.2
+1. 在Orders 的系列文件中更新了  
+   updateOrders ——解决从订单列表中跳转到支付界面时，因为没有再次创建订单，而导致的使用积分但是没有保存到orderTotal中的问题
 
 # Springboot的理解
 相比于之前的版本，Springboot不需要在DBUnit中寻找连接数据库的方式  
