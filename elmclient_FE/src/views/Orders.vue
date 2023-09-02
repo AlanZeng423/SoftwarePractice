@@ -29,19 +29,19 @@
         </div>
 
         <div class="order-deliveryfee">
-            <p>可用积分为：{{ point }}</p>
+            <p>可用积分为：{{point}}</p>
             <button @click="toggleUsePoints">{{ usePoints ? '取消使用积分' : '使用积分' }}</button>
         </div>
         <div class="order-deliveryfee" v-if="usePoints">
-            <input type="range" min="0" :max="maxPointsUsing" step="100" v-model="usePointsNum">
-            <p>选择使用积分数量: {{ usePointsNum }}</p>
+        <input type="range" min="0" :max="maxPointsUsing" step="100" v-model="usePointsNum">
+        <p>选择使用积分数量: {{ usePointsNum }}</p>
         </div>
         <div class="order-deliveryfee">
             <p>积分抵扣金额为</p>
-            <p>&#165{{ usePointsNum / 100 }}</p>
+            <p>&#165{{ usePointsNum/100 }}</p>
         </div>
 
-
+        
 
         <!-- 合计部分 -->
         <div class="total">
@@ -72,12 +72,15 @@ export default {
         const router = useRouter();
         const route = useRoute();
         const businessId = ref(route.query.businessId);
+        const UsedOrderId = ref(route.query.UsedOrderId)
         const business = ref({});
         // const user = ref({});
         const user = ref({
             gender: 1,
+            userId: 0,
         });
         const cartArr = ref([]);
+        const foodArr = ref([]);
         const deliveryaddress = ref([]);
 
         //新增的积分部分
@@ -86,7 +89,7 @@ export default {
         const maxPointsUsing = ref(0);//最大可用积分数量（每满100可以使用100积分）
         const point = ref(0);
 
-        onMounted(() => {
+        onMounted(()=> {
             user.value = $getSessionStorage('user');
             deliveryaddress.value = $getLocalStorage(user.value.userId);
             //查询当前商家
@@ -98,25 +101,34 @@ export default {
                 console.error(error);
             });
             //查询当前用户在购物车中的当前商家食品列表 
-            axios.post('CartController/listCart', qs.stringify({
-                userId: user.value.userId,
-                businessId: businessId.value
-            })).then(response => {
-                cartArr.value = response.data;
-            }).catch(error => {
-                console.error(error);
-            });
+            
+            if(UsedOrderId.value == 0){
+                axios.post('CartController/listCart', qs.stringify({
+                    userId: user.value.userId,
+                    businessId: businessId.value
+                })).then(response => {
+                    cartArr.value = response.data;
+                }).catch(error => {
+                    console.error(error);
+                });
+            }else{
+                axios.post('OrdersController/getOrdersById',qs.stringify({
+                    orderId:UsedOrderId.value
+                })).then(response => {
+                    cartArr.value = response.data.list;
+                });
+            }
             //查询当前用户的积分数量
             axios.post('UserController/getPointById', qs.stringify({
                 userId: user.value.userId
-            })).then(response => {
+            })).then(response =>{
                 point.value = response.data;
             }).catch(error => {
                 console.error(error);
             });
         })
 
-        const toggleUsePoints = () => {
+        const toggleUsePoints = () =>{
             usePoints.value = !usePoints.value;
         }
         const toUserAddress = () => {
@@ -128,51 +140,76 @@ export default {
                 return;
             }
             //创建订单 
-            axios.post('OrdersController/createOrders', qs.stringify({
+            if(UsedOrderId.value != 0){
+                //老订单,要根据积分的使用情况去更改
+                if(usePoints.value == true){
+                    axios.post('OrdersController/updateOrders', qs.stringify({
+                        orderId: UsedOrderId.value, 
+                        orderTotal: totalPrice.value
+                    })).catch(error => {
+                        console.error(error);
+                    });
+                }
+                
+                router.push({ path: '/payment', query: {
+                    orderId: UsedOrderId.value, 
+                    discountNum: usePointsNum.value/100,
+                    point: point.value}});
+            }
+            else{
+                //新订单
+                axios.post('OrdersController/createOrders', qs.stringify({
                 userId: user.value.userId,
                 businessId: businessId.value,
                 daId: deliveryaddress.value.daId,
                 orderTotal: totalPrice.value
-            })).then(response => {
-                let orderId = response.data;
-                if (orderId > 0) {
-                    router.push({
-                        path: '/payment', query: {
-                            orderId: orderId,
-                            discountNum: usePointsNum.value / 100,
-                            point: point.value
-                        }
-                    });
-                } else {
-                    alert('创建订单失败!');
-                }
-            }).catch(error => {
-                console.error(error);
-            });
+                })).then(response => {
+                    let orderId = response.data;
+                    if (orderId > 0) {
+                        // router.push({path:'/'});
+                        router.push({ path: '/payment', query: {
+                            orderId: orderId, 
+                            discountNum: usePointsNum.value/100,
+                            point: point.value}});
+                    } else {
+                        alert('创建订单失败!');
+                    }
+                }).catch(error => {
+                    console.error(error);
+                });
+            }
         }
-
+        
         const totalPrice = computed(() => {
             let totalPrice = 0;
-            for (let cartItem of cartArr.value) {
-                totalPrice += cartItem.food.foodPrice * cartItem.quantity;
-            }
-            totalPrice += business.value.deliveryPrice;
-            if (usePoints.value) {
-                if (point.value / 100 <= totalPrice) {
-                    maxPointsUsing.value = point.value - point.value % 100;
+            if(UsedOrderId.value == 0){
+                for (let cartItem of cartArr.value) {
+                    totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+                    //alert(totalPrice);
                 }
-                else {
-                    maxPointsUsing.value = (totalPrice - totalPrice % 1) * 100;
-                }
-                totalPrice = totalPrice - usePointsNum.value / 100;
             }
-            //if()//在这个地方要判断是否使用积分
-            return totalPrice;
-        });
+            else{
+                for (let cartItem of cartArr.value) {
+                    totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+                }
+            }
+                totalPrice += business.value.deliveryPrice;
+                if(usePoints.value){
+                    if(point.value/100 <= totalPrice){
+                        maxPointsUsing.value = point.value - point.value%100;
+                    }
+                    else{
+                        maxPointsUsing.value = (totalPrice-totalPrice%1)*100;
+                    }
+                    totalPrice = totalPrice - usePointsNum.value/100;
+                }
+                //if()//在这个地方要判断是否使用积分
+                return totalPrice;
+            });
 
         const sexFilters = (value) => {
             return value === 1 ? '先生' : '女士';
-
+            
         }
 
         return {
@@ -186,13 +223,15 @@ export default {
             usePointsNum,
             maxPointsUsing,
             point,
+            UsedOrderId,
+            foodArr,
             toPayment,
             toUserAddress,
             toggleUsePoints
         };
     }
 }
-
+    
 
 </script>
 <style scoped>
@@ -312,7 +351,6 @@ export default {
     align-items: center;
     font-size: 3.5vw;
 }
-
 .wrapper .order-point {
     width: 100%;
     height: 20vw;
@@ -324,7 +362,6 @@ export default {
     align-items: center;
     font-size: 3.5vw;
 }
-
 /****************** 订单合计部分 ******************/
 .wrapper .total {
     width: 100%;
