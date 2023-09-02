@@ -24,7 +24,7 @@
                 <!-- {{ getUserGenderText(user.gender) }} -->
             </div>
             <div class="detail-item">
-                <strong>积分：</strong>{{ user.point }}
+                <strong>积分：</strong>{{ point }}
             </div>
 
 
@@ -53,8 +53,9 @@ export default {
     setup() {
         // const user = ref({});
         const $getSessionStorage = inject('$getSessionStorage');
-        const user = $getSessionStorage('user');
+        const user = ref({})
         const router = useRouter();
+        const point = ref(0);
         // axios.post()
         const convertGenderText = (num) => {
             if (num == 1) return '男';
@@ -66,8 +67,20 @@ export default {
             router.push({ path: '/login' });
         }
 
+        onMounted(()=>{
+            user.value =$getSessionStorage('user');
+            axios.post('UserController/getPointById', qs.stringify({
+                userId: user.value.userId
+            })).then(response =>{
+                point.value = response.data;
+            }).catch(error => {
+                console.error(error);
+            });
+        })
+        
         return {
             user,
+            point,
             convertGenderText,
             logout
         }
