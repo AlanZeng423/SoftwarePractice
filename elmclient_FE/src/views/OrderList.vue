@@ -75,6 +75,7 @@ export default {
         Footer
     },
     setup() {
+        document.onscroll = null;
         const $getSessionStorage = inject('$getSessionStorage');
         const orderArr = ref([]);
         const user = ref({});

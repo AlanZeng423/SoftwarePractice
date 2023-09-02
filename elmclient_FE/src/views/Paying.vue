@@ -5,7 +5,8 @@
         </header>
         <div class="container">
             <button class="paying-button" @click="updatePoint">
-                支付成功，您现在的积分为：{{ newpoint }}
+                支付&#165;{{ totalPrice }}成功
+                您现在的积分为：{{ newpoint }}
             </button>
         </div>
         <Footer></Footer>
