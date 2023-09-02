@@ -332,38 +332,43 @@ export default {
     components: {
         Footer
     },
-    setup(){
+    setup() {
         // const $refs = inject('$refs');
         // const route = useRoute();
         const router = useRouter();
         const fixedBox = ref(null);
+        const proxy = getCurrentInstance();
 
         onMounted(() => {
             document.onscroll = () => {
-            //获取滚动条位置
-            let s1 = document.documentElement.scrollTop;
-            let s2 = document.body.scrollTop;
-            let scroll = s1 == 0 ? s2 : s1;
-            //获取视口宽度
-            let width = document.documentElement.clientWidth;
-        //获取顶部固定块
-            let search = fixedBox.value;
-        //判断滚动条超过视口宽度的12%时，搜索块变固定定位
-            if (scroll > width * 0.12) {
-                search.style.position = 'fixed';
-                search.style.left = '0';
-                search.style.top = '0';
-            } else {
-                search.style.position = 'static';
+                //获取滚动条位置
+                let s1 = document.documentElement.scrollTop;
+                let s2 = document.body.scrollTop;
+                let scroll = s1 == 0 ? s2 : s1;
+                //获取视口宽度
+                let width = document.documentElement.clientWidth;
+                //获取顶部固定块
+                let search = proxy.refs.fixedBox;
+                // let search = fixedBox.value;
+                //判断滚动条超过视口宽度的12%时，搜索块变固定定位
+                if (scroll > width * 0.12) {
+                    search.style.position = 'fixed';
+                    search.style.left = '0';
+                    search.style.top = '0';
+                } else {
+                    search.style.position = 'static';
+                }
+                
             }
-            }})
+        })
         const destroyed = () => {
             //当切换到其他组件时，就不需要document滚动条事件，所以将此事件去掉
             document.onscroll = null;
         };
 
-        const toBusinessList = (orderTypeId) =>{
-            router.push({path:'/businessList',query:{orderTypeId:orderTypeId}});
+        const toBusinessList = (orderTypeId) => {
+            router.push({ path: '/businessList', query: { orderTypeId: orderTypeId } });
+            destroyed();
         };
 
         return {
@@ -371,7 +376,7 @@ export default {
             toBusinessList,
             fixedBox
         };
-        }
+    }
 
 }
 </script>
