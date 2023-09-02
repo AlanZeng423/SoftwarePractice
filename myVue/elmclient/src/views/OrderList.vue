@@ -15,7 +15,7 @@
                         <i class="fa fa-caret-down" @click="detailetShow(item)"></i>
                     </p>
                     <div class="order-info-right">
-                        <p>&#165;{{ item.orderTotal }}</p>
+                        <p>&#165;{{ calculateTotalPrice(item.list)+item.business.deliveryPrice }}</p>
                         <div class="order-info-right-icon" @click="toOrder(item)">去支付</div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
 </template>
 <script>
 
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, inject, computed } from 'vue';
 import Footer from '../components/Footer.vue';
 import axios from 'axios'; // 添加这一行来引入 axios
 import qs from 'qs';
@@ -98,6 +98,14 @@ export default {
             });
         });
 
+        const calculateTotalPrice = (itemList) =>{
+            let totalPrice = 0;
+            for (const odItem of itemList) {
+                totalPrice += odItem.food.foodPrice * odItem.quantity;
+            }
+            return totalPrice ;
+        };
+
         const detailetShow = (order) => {
             order.isShowDetailet = !order.isShowDetailet;
         };
@@ -105,7 +113,7 @@ export default {
         const toOrder = (order) =>{
             router.push({path:'/orders',query:{
                 businessId: order.businessId,
-                orderId1: order.orderId,
+                UsedOrderId: order.orderId,
             }})
         }
         return {
@@ -113,7 +121,8 @@ export default {
             user,
             orderLoad,
             detailetShow,
-            toOrder
+            toOrder,
+            calculateTotalPrice
         };
     }
 };

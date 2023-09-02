@@ -30,4 +30,9 @@ public class OrdersController {
  public int updateOrder(Orders orders) throws Exception{
   return ordersService.updateOrder(orders.getOrderId(),orders.getOrderState());
  }
+
+ @RequestMapping("/updateOrders")
+ public int updateOrders(Orders orders) throws Exception{
+  return ordersService.updateOrders(orders.getOrderId(), orders.getOrderTotal());
+ }
 }

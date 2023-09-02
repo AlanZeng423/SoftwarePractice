@@ -7,4 +7,6 @@ public interface OrdersService {
  public List<Orders> listOrdersByUserId(String userId);
 
  public int updateOrder(Integer orderId, Integer orderState);
+
+    int updateOrders(Integer orderId, Double orderTotal);
 }

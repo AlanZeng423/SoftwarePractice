@@ -13,7 +13,7 @@
             <p>&#165;{{ orders.orderTotal }}</p >
         </div>
         <!-- 订单明细部分 -->
-        <ul class="order-detailet" v-show="isShowDetailet">
+        <ul class="order-detailet" v-show="!isShowDetailet">
             <li v-for="item in orders.list">
                 <p>{{ item.food.foodName }} x {{ item.quantity }}</p >
                 <p>&#165;{{ item.food.foodPrice * item.quantity }}</p >

@@ -20,4 +20,7 @@ public interface OrdersMapper {
 
 	@Update("update orders set orderState = #{orderState} where orderId = #{orderId}")
     public int updateOrder(Integer orderId, Integer orderState);
+
+	@Update("update orders set orderTotal = #{orderTotal} where orderId = #{orderId}")
+	int updateOrders(Integer orderId, Double orderTotal);
 }

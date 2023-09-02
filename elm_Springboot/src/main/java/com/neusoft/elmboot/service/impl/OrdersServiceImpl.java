@@ -66,4 +66,7 @@ public class OrdersServiceImpl implements OrdersService{
  public int updateOrder(Integer orderId, Integer orderState){
   return ordersMapper.updateOrder(orderId,orderState);
  }
+ public int updateOrders(Integer orderId, Double orderTotal){
+  return ordersMapper.updateOrders(orderId,orderTotal);
+ }
 }

@@ -72,7 +72,7 @@ export default {
         const router = useRouter();
         const route = useRoute();
         const businessId = ref(route.query.businessId);
-        const orderId1 = ref(route.query.orderId1)
+        const UsedOrderId = ref(route.query.UsedOrderId)
         const business = ref({});
         // const user = ref({});
         const user = ref({
@@ -80,6 +80,7 @@ export default {
             userId: 0,
         });
         const cartArr = ref([]);
+        const foodArr = ref([]);
         const deliveryaddress = ref([]);
 
         //新增的积分部分
@@ -90,7 +91,6 @@ export default {
 
         onMounted(()=> {
             user.value = $getSessionStorage('user');
-
             deliveryaddress.value = $getLocalStorage(user.value.userId);
             //查询当前商家
             axios.post('BusinessController/getBusinessById', qs.stringify({
@@ -101,14 +101,23 @@ export default {
                 console.error(error);
             });
             //查询当前用户在购物车中的当前商家食品列表 
-            axios.post('CartController/listCart', qs.stringify({
-                userId: user.value.userId,
-                businessId: businessId.value
-            })).then(response => {
-                cartArr.value = response.data;
-            }).catch(error => {
-                console.error(error);
-            });
+            
+            if(UsedOrderId.value == 0){
+                axios.post('CartController/listCart', qs.stringify({
+                    userId: user.value.userId,
+                    businessId: businessId.value
+                })).then(response => {
+                    cartArr.value = response.data;
+                }).catch(error => {
+                    console.error(error);
+                });
+            }else{
+                axios.post('OrdersController/getOrdersById',qs.stringify({
+                    orderId:UsedOrderId.value
+                })).then(response => {
+                    cartArr.value = response.data.list;
+                });
+            }
             //查询当前用户的积分数量
             axios.post('UserController/getPointById', qs.stringify({
                 userId: user.value.userId
@@ -131,10 +140,19 @@ export default {
                 return;
             }
             //创建订单 
-            if(orderId1.value != 0){
-                //老订单
+            if(UsedOrderId.value != 0){
+                //老订单,要根据积分的使用情况去更改
+                if(usePoints.value == true){
+                    axios.post('OrdersController/updateOrders', qs.stringify({
+                        orderId: UsedOrderId.value, 
+                        orderTotal: totalPrice.value
+                    })).catch(error => {
+                        console.error(error);
+                    });
+                }
+                
                 router.push({ path: '/payment', query: {
-                    orderId: orderId1.value, 
+                    orderId: UsedOrderId.value, 
                     discountNum: usePointsNum.value/100,
                     point: point.value}});
             }
@@ -164,9 +182,17 @@ export default {
         
         const totalPrice = computed(() => {
             let totalPrice = 0;
-            for (let cartItem of cartArr.value) {
+            if(UsedOrderId.value == 0){
+                for (let cartItem of cartArr.value) {
+                    totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+                    //alert(totalPrice);
+                }
+            }
+            else{
+                for (let cartItem of cartArr.value) {
                     totalPrice += cartItem.food.foodPrice * cartItem.quantity;
                 }
+            }
                 totalPrice += business.value.deliveryPrice;
                 if(usePoints.value){
                     if(point.value/100 <= totalPrice){
@@ -197,7 +223,8 @@ export default {
             usePointsNum,
             maxPointsUsing,
             point,
-            orderId1,
+            UsedOrderId,
+            foodArr,
             toPayment,
             toUserAddress,
             toggleUsePoints
