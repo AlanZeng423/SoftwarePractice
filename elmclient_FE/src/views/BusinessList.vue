@@ -86,10 +86,7 @@ export default {
         const toBusinessInfo = (businessId) => {
             router.push({ path: '/businessInfo', query: { businessId: businessId } });
         };
-        // const toIndex = () => {
-        //     router.push({ path: '/index' });
-        // };
-
+        
         return {
             orderTypeId,
             businessArr,

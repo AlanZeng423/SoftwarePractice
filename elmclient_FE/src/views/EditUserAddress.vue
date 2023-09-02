@@ -67,14 +67,6 @@ export default {
         const user = ref({});
         const deliveryAddress = ref({});
     
-    // data() {
-    //     return {
-    //         businessId: this.$route.query.businessId,
-    //         daId: this.$route.query.daId,
-    //         user: {},
-    //         deliveryAddress: {}
-    //     }
-    // },
         onMounted(()=>{
         
             user.value = $getSessionStorage('user');

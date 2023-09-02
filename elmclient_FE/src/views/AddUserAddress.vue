@@ -112,20 +112,7 @@ export default {
 
         };
 
-    }
-    // data() {
-    //     return {
-    //         businessId: this.$route.query.businessId,
-    //         user: {},
-    //         deliveryAddress: {
-    //             contactName: '',
-    //             contactSex: 1,
-    //             contactTel: '',
-    //             address: ''
-    //         }
-    //     }
-    // },
-    
+    }    
     
 }
 </script>

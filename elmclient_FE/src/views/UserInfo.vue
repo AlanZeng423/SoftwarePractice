@@ -4,15 +4,10 @@
             我的信息
         </header>
         <div class="profile-header">
-            <!-- <img src="../assets/alipay.png"> -->
-            <!-- <img class="profile-picture" src="../assets/userImg/yhtx01.png" alt="UserImg" /> -->
             <img class="profile-picture" :src="user.userImg" alt="UserImg" />
-            <!-- <img :src="item.businessImg"> -->
-            <h1>{{ user.name }}</h1>
-            <p>{{ user.bio }}</p>
         </div>
+        
         <div class="profile-details">
-
             <div class="detail-item">
                 <strong>账号：</strong>{{ user.userId }}
             </div>
@@ -21,7 +16,6 @@
             </div>
             <div class="detail-item">
                 <strong>性别：</strong>{{ convertGenderText(user.userSex) }}
-                <!-- {{ getUserGenderText(user.gender) }} -->
             </div>
             <div class="detail-item">
                 <strong>积分：</strong>{{ point }}
@@ -44,19 +38,17 @@ import Footer from '../components/Footer.vue';
 // const $getSessionStorage = inject('$getSessionStorage');
 import axios from 'axios';
 import qs from 'qs';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 export default {
     name: 'UserInfo',
     components: {
         Footer,
     },
     setup() {
-        // const user = ref({});
         const $getSessionStorage = inject('$getSessionStorage');
         const user = ref({})
         const router = useRouter();
         const point = ref(0);
-        // axios.post()
         const convertGenderText = (num) => {
             if (num == 1) return '男';
             else return '女';
@@ -69,6 +61,7 @@ export default {
 
         onMounted(()=>{
             user.value =$getSessionStorage('user');
+            console.log(user)
             axios.post('UserController/getPointById', qs.stringify({
                 userId: user.value.userId
             })).then(response =>{
@@ -85,17 +78,6 @@ export default {
             logout
         }
     }
-
-    // return {
-    //     user: {
-    //         name: 'John Doe',
-    //         username: 'johndoe123',
-    //         email: 'johndoe@example.com',
-    //         gender: '男',
-    //         birthdate: '1990-01-01',
-    //         bio: '喜欢编程和旅行的前端工程师。',
-    //         avatar: 'profile.jpg'
-    //     }
 
 
 };
@@ -131,8 +113,8 @@ export default {
 }
 
 .profile-picture {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 5px;
@@ -153,11 +135,6 @@ export default {
 .container {
     margin: 20px;
     background-color: #f3f3f3;
-    /* display: flex; */
-    /* justify-content: center;
-    align-items: center; */
-    /* height: 100vh; */
-    /* 垂直方向上铺满整个视口高度 */
     display: flex;
     justify-content: center;
     align-items: center;
