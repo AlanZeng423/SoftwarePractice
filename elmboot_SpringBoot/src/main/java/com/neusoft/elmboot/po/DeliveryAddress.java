@@ -12,6 +12,7 @@ public class DeliveryAddress {
     public Integer getDaId() {
         return daId;
     }
+
     public void setDaId(Integer daId) {
         this.daId = daId;
     }
@@ -19,6 +20,7 @@ public class DeliveryAddress {
     public String getContactName() {
         return contactName;
     }
+
     public void setContactName(String contactName) {
         this.contactName = contactName;
     }
@@ -26,6 +28,7 @@ public class DeliveryAddress {
     public Integer getContactSex() {
         return contactSex;
     }
+
     public void setContactSex(Integer contactSex) {
         this.contactSex = contactSex;
     }
@@ -33,6 +36,7 @@ public class DeliveryAddress {
     public String getContactTel() {
         return contactTel;
     }
+
     public void setContactTel(String contactTel) {
         this.contactTel = contactTel;
     }
@@ -40,6 +44,7 @@ public class DeliveryAddress {
     public String getAddress() {
         return address;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -47,6 +52,7 @@ public class DeliveryAddress {
     public String getUserId() {
         return userId;
     }
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
