@@ -13,6 +13,7 @@ public class OrderDetailet {
     public Integer getOdId() {
         return odId;
     }
+
     public void setOdId(Integer odId) {
         this.odId = odId;
     }
@@ -20,6 +21,7 @@ public class OrderDetailet {
     public Integer getOrderId() {
         return orderId;
     }
+
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
@@ -27,6 +29,7 @@ public class OrderDetailet {
     public Integer getFoodId() {
         return foodId;
     }
+
     public void setFoodId(Integer foodId) {
         this.foodId = foodId;
     }
@@ -34,6 +37,7 @@ public class OrderDetailet {
     public Integer getQuantity() {
         return quantity;
     }
+
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
@@ -41,6 +45,7 @@ public class OrderDetailet {
     public Food getFood() {
         return food;
     }
+
     public void setFood(Food food) {
         this.food = food;
     }

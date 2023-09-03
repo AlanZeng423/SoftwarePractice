@@ -67,18 +67,11 @@
 
 <script>
 import { ref, onMounted, inject, computed } from 'vue';
-
 import Footer from '../components/Footer.vue';
 import axios from 'axios'; // 添加这一行来引入 axios
 import qs from 'qs';
 import { useRoute, useRouter } from 'vue-router';
 
-// return {
-//             businessId: this.$route.query.businessId,
-//             business: {},
-//             foodArr: [],
-//             user: {}
-//         }
 
 export default {
     name: 'BusinessInfo',
@@ -91,7 +84,6 @@ export default {
     const router = useRouter();
     const businessId = ref(route.query.businessId);
     const business = ref({});
-
     const foodArr = ref([]);
     const user = ref({});
     
@@ -234,7 +226,8 @@ export default {
         router.push({
             path: '/orders',
             query: {
-                businessId: business.value.businessId
+                businessId: business.value.businessId,
+                UsedOrderId : 0,
             }
         });
     }

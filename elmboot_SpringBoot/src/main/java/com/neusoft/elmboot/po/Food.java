@@ -11,17 +11,18 @@ public class Food {
 
     @Override
     public String toString() {
-        return "\n食品编号："+this.foodId+
-                "\n食品名称："+this.foodName+
-                "\n食品介绍："+this.foodExplain+
-                "\n食品价格："+this.foodPrice+
-                "\n所属商家："+this.businessId;
+        return "\n食品编号：" + this.foodId +
+                "\n食品名称：" + this.foodName +
+                "\n食品介绍：" + this.foodExplain +
+                "\n食品价格：" + this.foodPrice +
+                "\n所属商家：" + this.businessId;
     }
 
     //get、set ... ...
     public Integer getFoodId() {
         return foodId;
     }
+
     public void setFoodId(Integer foodId) {
         this.foodId = foodId;
     }
@@ -29,6 +30,7 @@ public class Food {
     public String getFoodName() {
         return foodName;
     }
+
     public void setFoodName(String foodName) {
         this.foodName = foodName;
     }
@@ -36,6 +38,7 @@ public class Food {
     public String getFoodExplain() {
         return foodExplain;
     }
+
     public void setFoodExplain(String foodExplain) {
         this.foodExplain = foodExplain;
     }
@@ -43,6 +46,7 @@ public class Food {
     public String getFoodImg() {
         return foodImg;
     }
+
     public void setFoodImg(String foodImg) {
         this.foodImg = foodImg;
     }
@@ -50,6 +54,7 @@ public class Food {
     public Double getFoodPrice() {
         return foodPrice;
     }
+
     public void setFoodPrice(Double foodPrice) {
         this.foodPrice = foodPrice;
     }
@@ -57,6 +62,7 @@ public class Food {
     public Integer getBusinessId() {
         return businessId;
     }
+
     public void setBusinessId(Integer businessId) {
         this.businessId = businessId;
     }
@@ -64,6 +70,7 @@ public class Food {
     public String getRemarks() {
         return remarks;
     }
+
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }

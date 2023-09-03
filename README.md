@@ -1,8 +1,12 @@
 # SoftwarePractice
 
 ## 1. JDBC done
+`./JDBC_elm_admin`
 ## 2. Front_End done
+`./FrontEnd_elm_demo`
 ## 3. Servlet done
+`./elmclient_FE`
+**适用于项目3&4**
 ### Frontend by ALAN
 在 SoftwarePractice/myVue/elmClient 路径下
 
@@ -27,5 +31,16 @@ Vue.js - The Progressive JavaScript Framework
 - `npm install`
 - `npm run serve`
 
+###  BackgroundEnd By YHY
+`./elm_servlet_BE`
+
 ## 4.SpringBoot done
+By LTR
+`./elmboot_SpringBoot`
+
+## 5. Implementation of other functions
+- 积分系统
+- 我的信息页面
+- 支付成功页面
+  ...
 

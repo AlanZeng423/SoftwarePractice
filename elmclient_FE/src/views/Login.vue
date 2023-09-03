@@ -32,13 +32,12 @@
         <Footer></Footer>
     </div>
 </template>
-
 <script>
+
 import { ref, onMounted, inject, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios'; // 添加这一行来引入 axios
+import axios from 'axios'; 
 import qs from 'qs';
-// import axios from 'axios'; // 引入 axios
 
 
 import Footer from '../components/Footer.vue';
@@ -49,7 +48,6 @@ export default {
         Footer,
     },
     setup() {
-        // const $axios = inject('$axios'); // Inject the $axios instance
         const userId = ref('');
         const password = ref('');
 
@@ -66,28 +64,20 @@ export default {
             }
 
             // 登录请求
-            axios
-                .post('UserController/getUserByIdByPass', qs.stringify({
+            axios.post('UserController/getUserByIdByPass', qs.stringify({
                     userId: userId.value,
                     password: password.value,
-                }))
-                .then(response => {
+                })).then(response => {
                     const user = response.data;
-                    console.log(user);
-                    console.log(user=='');
-                    if (user == null || user == '') {
-                        //failed
-                        //P3 : null
-                        //P4 : ''
+                    if (user === null) {
                         alert('用户名或密码不正确!');
                     } else {
-                        // user.userImg = ;
+                        // user.userImg = '';
+                        //sessionstorage有容量限制，为了防止数据溢出，所以不将userImg数据放入session中
                         sessionStorage.setItem('user', JSON.stringify(user));
-                        console.log(user);
                         router.go(-1);
                     }
-                })
-                .catch(error => {
+                }).catch(error => {
                     console.error(error);
                 });
         };

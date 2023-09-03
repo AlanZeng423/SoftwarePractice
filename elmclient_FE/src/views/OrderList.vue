@@ -15,8 +15,8 @@
                         <i class="fa fa-caret-down" @click="detailetShow(item)"></i>
                     </p>
                     <div class="order-info-right">
-                        <p>&#165;{{ item.orderTotal }}</p>
-                        <div class="order-info-right-icon">去支付</div>
+                        <p>&#165;{{ calculateTotalPrice(item.list)+item.business.deliveryPrice }}</p>
+                        <div class="order-info-right-icon" @click="toOrder(item)">去支付</div>
                     </div>
                 </div>
                 <ul class="order-detailet" v-show="item.isShowDetailet" v-if="item.orderState === 0">
@@ -63,10 +63,11 @@
 </template>
 <script>
 
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, inject, computed } from 'vue';
 import Footer from '../components/Footer.vue';
 import axios from 'axios'; // 添加这一行来引入 axios
 import qs from 'qs';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
     name: 'OrderList',
@@ -74,10 +75,13 @@ export default {
         Footer
     },
     setup() {
+        document.onscroll = null;
         const $getSessionStorage = inject('$getSessionStorage');
         const orderArr = ref([]);
         const user = ref({});
         const orderLoad= ref(false);
+        const router = useRouter();
+        const route = useRoute();
 
         onMounted(() => {  
             user.value = $getSessionStorage('user');
@@ -95,15 +99,31 @@ export default {
             });
         });
 
+        const calculateTotalPrice = (itemList) =>{
+            let totalPrice = 0;
+            for (const odItem of itemList) {
+                totalPrice += odItem.food.foodPrice * odItem.quantity;
+            }
+            return totalPrice ;
+        };
+
         const detailetShow = (order) => {
             order.isShowDetailet = !order.isShowDetailet;
         };
 
+        const toOrder = (order) =>{
+            router.push({path:'/orders',query:{
+                businessId: order.businessId,
+                UsedOrderId: order.orderId,
+            }})
+        }
         return {
             orderArr,
             user,
+            orderLoad,
             detailetShow,
-            orderLoad
+            toOrder,
+            calculateTotalPrice
         };
     }
 };

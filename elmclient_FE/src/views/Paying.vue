@@ -5,7 +5,8 @@
         </header>
         <div class="container">
             <button class="paying-button" @click="updatePoint">
-                支付成功: &#165;{{ totalPrice }}
+                支付&#165;{{ totalPrice }}成功
+                您现在的积分为：{{ newpoint }}
             </button>
         </div>
         <Footer></Footer>
@@ -35,34 +36,12 @@ export default {
         const totalPrice = ref(route.query.totalPrice);
         const orderId = ref(route.query.orderId);
         const point = ref(route.query.point);
-        const orderState = ref(0);
+        const orderState = ref(1);
         
         // axios.post()
         onMounted(()=>{
             user.value = $getSessionStorage('user');
         })
-
-        // const newpoint =  computed(() =>{
-        //     let newpoint = 0;
-        //     // console.log(totalPrice.value);
-        //     // console.log(discountNum.value);
-        //     // console.log(point.value);
-            
-        //     // console.log(newpoint);
-        //     newpoint = totalPrice.value-0;
-        //     // console.log(newpoint);
-            
-        //     newpoint = newpoint + point.value-0;
-            
-
-        //     // console.log(newpoint);
-        //     if(discountNum.value > 0){
-        //         newpoint = newpoint - discountNum.value*100;
-        //         // console.log(newpoint);
-        //     }
-        //     // console.log(newpoint);
-        //     return newpoint;
-        // });
 
         const newpoint =  computed(() =>{
             let newpoint = 0;

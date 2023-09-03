@@ -15,6 +15,7 @@ public class Cart {
     public Integer getCartId() {
         return cartId;
     }
+
     public void setCartId(Integer cartId) {
         this.cartId = cartId;
     }
@@ -22,6 +23,7 @@ public class Cart {
     public Integer getFoodId() {
         return foodId;
     }
+
     public void setFoodId(Integer foodId) {
         this.foodId = foodId;
     }
@@ -29,6 +31,7 @@ public class Cart {
     public Integer getBusinessId() {
         return businessId;
     }
+
     public void setBusinessId(Integer businessId) {
         this.businessId = businessId;
     }
@@ -36,6 +39,7 @@ public class Cart {
     public String getUserId() {
         return userId;
     }
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -43,6 +47,7 @@ public class Cart {
     public Integer getQuantity() {
         return quantity;
     }
+
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
@@ -52,6 +57,7 @@ public class Cart {
     public Food getFood() {
         return food;
     }
+
     public void setFood(Food food) {
         this.food = food;
     }
@@ -59,6 +65,7 @@ public class Cart {
     public Business getBusiness() {
         return business;
     }
+
     public void setBusiness(Business business) {
         this.business = business;
     }

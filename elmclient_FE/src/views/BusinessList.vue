@@ -27,56 +27,6 @@
 
 
 <script>
-
-// export default {
-//     name: 'BusinessList',
-//     data() {
-//         return {
-//             orderTypeId: this.$route.query.orderTypeId,
-//             businessArr: [],
-//             user: {}
-//         }
-//     },
-//     created() {
-//         this.user = this.$getSessionStorage('user');
-//         //根据orderTypeId查询商家信息 
-//         this.$axios.post('BusinessController/listBusinessByOrderTypeId', this.$qs.stringify({
-//             orderTypeId: this.orderTypeId
-//         })).then(response => {
-//             this.businessArr = response.data; //判断是否登录 
-//             if (this.user != null) {
-//                 this.listCart();
-//             }
-//         }).catch(error => {
-//             console.error(error);
-//         });
-//     },
-//     components: {
-//         Footer
-//     }, methods: {
-//         listCart() {
-//             this.$axios.post('CartController/listCart', this.$qs.stringify({
-//                 userId: this.user.userId
-//             })).then(response => {
-//                 let cartArr = response.data; //遍历所有食品列表
-//                 for (let businessItem of this.businessArr) {
-//                     businessItem.quantity = 0;
-//                     for (let cartItem of cartArr) {
-//                         if (cartItem.businessId == businessItem.businessId) {
-//                             businessItem.quantity += cartItem.quantity;
-//                         }
-//                     }
-//                 }
-//                 this.businessArr.sort();
-//             }).catch(error => {
-//                 console.error(error);
-//             });
-//         },
-//         toBusinessInfo(businessId) {
-//             this.$router.push({ path: '/businessInfo', query: { businessId: businessId } });
-//         }
-//     }
-// }
 import Footer from '../components/Footer.vue';
 import { ref, onMounted, inject, getCurrentInstance } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -136,10 +86,7 @@ export default {
         const toBusinessInfo = (businessId) => {
             router.push({ path: '/businessInfo', query: { businessId: businessId } });
         };
-        // const toIndex = () => {
-        //     router.push({ path: '/index' });
-        // };
-
+        
         return {
             orderTypeId,
             businessArr,
