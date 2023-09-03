@@ -84,7 +84,7 @@
         </div>
         <!-- 推荐方式部分 -->
         <ul class="recommendtype">
-            <li>综合排序<i class="fa fa-caret-down"></i></li>
+            <li @click="getComprehensiveSort">综合排序<i class="fa fa-caret-down"></i></li>
             <li>距离最近</li>
             <li>销量最高</li>
             <li>筛选<i class="fa fa-filter"></i></li>
@@ -369,9 +369,13 @@ export default {
             router.push({path:'/businessList',query:{orderTypeId:orderTypeId}});
         };
 
+        const getComprehensiveSort =() =>{
+
+        }
         return {
             destroyed,
-            toBusinessList
+            toBusinessList,
+            getComprehensiveSort
         };
         }
 

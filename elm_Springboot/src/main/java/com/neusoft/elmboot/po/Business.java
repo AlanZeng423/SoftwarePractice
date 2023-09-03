@@ -9,7 +9,8 @@ public class Business {
     private double starPrice; // 起送费
     private double deliveryPrice; // 配送费
     private String remarks;
-
+    private Integer views;
+    private Integer orderQuantity;
     @Override
     public String toString() {
         return "\n商家编号："+this.businessId+
@@ -24,7 +25,6 @@ public class Business {
     public Integer getBusinessId() {
         return businessId;
     }
-
     public void setBusinessId(Integer businessId) {
         this.businessId = businessId;
     }
@@ -32,7 +32,6 @@ public class Business {
     public String getBusinessName() {
         return businessName;
     }
-
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
     }
@@ -40,7 +39,6 @@ public class Business {
     public String getBusinessAddress() {
         return businessAddress;
     }
-
     public void setBusinessAddress(String businessAddress) {
         this.businessAddress = businessAddress;
     }
@@ -48,7 +46,6 @@ public class Business {
     public String getBusinessExplain() {
         return businessExplain;
     }
-
     public void setBusinessExplain(String businessExplain) {
         this.businessExplain = businessExplain;
     }
@@ -56,7 +53,6 @@ public class Business {
     public String getBusinessImg() {
         return businessImg;
     }
-
     public void setBusinessImg(String businessImg) {
         this.businessImg = businessImg;
     }
@@ -64,7 +60,6 @@ public class Business {
     public Integer getOrderTypeId() {
         return orderTypeId;
     }
-
     public void setOrderTypeId(Integer orderTypeId) {
         this.orderTypeId = orderTypeId;
     }
@@ -72,7 +67,6 @@ public class Business {
     public double getStarPrice() {
         return starPrice;
     }
-
     public void setStarPrice(double starPrice) {
         this.starPrice = starPrice;
     }
@@ -80,7 +74,6 @@ public class Business {
     public double getDeliveryPrice() {
         return deliveryPrice;
     }
-
     public void setDeliveryPrice(double deliveryPrice) {
         this.deliveryPrice = deliveryPrice;
     }
@@ -88,8 +81,21 @@ public class Business {
     public String getRemarks() {
         return remarks;
     }
-
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public Integer getViews(){
+        return views;
+    }
+    public void setViews(Integer views){
+        this.views = views;
+    }
+
+    public Integer getOrderQuantity(){
+        return orderQuantity;
+    }
+    public void setOrderQuantity(Integer orderQuantity) {
+        this.orderQuantity = orderQuantity;
     }
 }

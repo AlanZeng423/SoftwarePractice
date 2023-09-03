@@ -21,4 +21,12 @@ public class BusinessController {
  public Business getBusinessById(Business business) throws Exception{
  return businessService.getBusinessById(business.getBusinessId());
  }
+ @RequestMapping("/updateViews")
+ public int updateViews(Business business) throws Exception{
+  return businessService.updateViews(business.getBusinessId(),business.getViews());
+ }
+ @RequestMapping("/updateOrderQuantity")
+ public int updateOrderQuantity(Business business) throws Exception{
+  return businessService.updateOrderQuantity(business.getBusinessId(),business.getOrderQuantity());
+ }
 }

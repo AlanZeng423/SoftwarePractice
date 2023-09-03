@@ -18,4 +18,5 @@ public class BusinessController {
         Business business = service.getBusinessById(businessId);
         return business;
     }
+
 }
