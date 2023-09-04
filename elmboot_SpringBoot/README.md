@@ -23,6 +23,15 @@
     更新views
 4. Payment页面/Paying页面  
     更新orderQuantity
+#### 9.4
+完成了首页推荐部分的后端部分函数  
+listBusinessSortByView——访客最多  
+listBusinessSortByOrderQuantity——销量最多  
+listBusinessSortByAverage——综合排序（各50%）  
+updateViews——更新访问量  
+updateOrderQuantity——更新销量  
+
+
 
 # Springboot的理解
 相比于之前的版本，Springboot不需要在DBUnit中寻找连接数据库的方式  
