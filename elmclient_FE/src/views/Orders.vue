@@ -185,17 +185,20 @@ export default {
         
         const totalPrice = computed(() => {
             let totalPrice = 0;
-            if(UsedOrderId.value == 0){
-                for (let cartItem of cartArr.value) {
+            // if(UsedOrderId.value == 0){
+            //     for (let cartItem of cartArr.value) {
+            //         totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+            //         //alert(totalPrice);
+            //     }
+            // }
+            // else{
+            //     for (let cartItem of cartArr.value) {
+            //         totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+            //     }
+            // }
+            for (let cartItem of cartArr.value) {
                     totalPrice += cartItem.food.foodPrice * cartItem.quantity;
-                    //alert(totalPrice);
                 }
-            }
-            else{
-                for (let cartItem of cartArr.value) {
-                    totalPrice += cartItem.food.foodPrice * cartItem.quantity;
-                }
-            }
                 totalPrice += business.value.deliveryPrice;
                 if(usePoints.value){
                     if(point.value/100 <= totalPrice){

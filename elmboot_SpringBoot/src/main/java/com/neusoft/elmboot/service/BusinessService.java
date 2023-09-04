@@ -11,6 +11,12 @@ public interface BusinessService {
     int updateViews(Integer businessId, Integer views);
 
     int updateOrderQuantity(Integer businessId, Integer orderQuantity);
+
+    List<Business> listBusinessSortByView();
+
+    List<Business> listBusinessSortByOrderQuantity();
+
+    List<Business> listBusinessSortByAverage();
 }
 
 

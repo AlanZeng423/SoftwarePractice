@@ -33,4 +33,19 @@ public class BusinessServiceImpl implements BusinessService {
     public int updateOrderQuantity(Integer businessId, Integer orderQuantity) {
         return businessMapper.updateOrderQuantity(businessId,orderQuantity);
     }
+
+    @Override
+    public List<Business> listBusinessSortByView() {
+        return businessMapper.listBusinessSortByView();
+    }
+
+    @Override
+    public List<Business> listBusinessSortByOrderQuantity() {
+        return businessMapper.listBusinessSortByOrderQuantity();
+    }
+
+    @Override
+    public List<Business> listBusinessSortByAverage() {
+        return businessMapper.listBusinessSortByAverage();
+    }
 }

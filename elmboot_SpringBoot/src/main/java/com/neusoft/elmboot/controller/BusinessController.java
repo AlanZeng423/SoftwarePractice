@@ -25,12 +25,29 @@ public class BusinessController {
         return businessService.getBusinessById(business.getBusinessId());
     }
 
+    //新增浏览量
     @RequestMapping("/updateViews")
     public int updateViews(Business business) throws Exception{
         return businessService.updateViews(business.getBusinessId(),business.getViews());
     }
+    //新增购买量
     @RequestMapping("/updateOrderQuantity")
     public int updateOrderQuantity(Business business) throws Exception{
         return businessService.updateOrderQuantity(business.getBusinessId(),business.getOrderQuantity());
+    }
+    //获得商家顺序
+    @RequestMapping("/listBusinessSortByView")
+    public List<Business> listBusinessSortByView()throws Exception{
+        return businessService.listBusinessSortByView();
+    }
+
+    @RequestMapping("/listBusinessSortByOrderQuantity")
+    public List<Business> listBusinessSortByOrderQuantity()throws Exception{
+        return businessService.listBusinessSortByOrderQuantity();
+    }
+
+    @RequestMapping("/listBusinessSortByAverage")
+    public List<Business> listBusinessSortByAverage()throws Exception{
+        return businessService.listBusinessSortByAverage();
     }
 }

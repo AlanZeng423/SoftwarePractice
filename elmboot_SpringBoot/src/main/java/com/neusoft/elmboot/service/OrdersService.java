@@ -13,5 +13,5 @@ public interface OrdersService {
 
     public int updateOrder(Integer orderId, Integer orderState);
 
-    public int updateOrders(Integer orderId, Double orderTotal);
+        public int updateOrders(Integer orderId, Double orderTotal);
 }

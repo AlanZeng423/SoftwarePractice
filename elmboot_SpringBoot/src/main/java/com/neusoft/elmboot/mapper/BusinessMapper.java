@@ -20,4 +20,12 @@ public interface BusinessMapper {
 
     @Update("update business set orderQuantity = #{orderQuantity} where businessId = #{businessId}")
     public int updateOrderQuantity(Integer businessId,Integer orderQuantity);
+
+    @Select("select * from business order by views desc")
+    public List<Business> listBusinessSortByView();
+
+    @Select("select * from business order by orderQuantity desc")
+    public List<Business> listBusinessSortByOrderQuantity();
+    @Select("select * from business order by (orderQuantity+views)/2 desc")
+    public List<Business> listBusinessSortByAverage();
 }

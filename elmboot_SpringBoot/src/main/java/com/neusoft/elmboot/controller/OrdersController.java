@@ -29,11 +29,13 @@ public class OrdersController {
         return ordersService.listOrdersByUserId(orders.getUserId());
     }
 
+    //更新订单状态
     @RequestMapping("/updateOrder")
     public int updateOrder(Orders orders) throws Exception {
         return ordersService.updateOrder(orders.getOrderId(), orders.getOrderState());
     }
 
+    //更新订单总金额（含积分）
     @RequestMapping("/updateOrders")
     public int updateOrders(Orders orders) throws Exception {
         return ordersService.updateOrders(orders.getOrderId(), orders.getOrderTotal());
