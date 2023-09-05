@@ -10,7 +10,7 @@
             <div class="order-info-address" @click="toUserAddress">
                 <p>{{ deliveryaddress != null ? deliveryaddress.address : '请选择送货地址' }}</p> <i class="fa fa-angle-right"></i>
             </div>
-            <p>{{ user.userName }}{{ user.userSex | sexFilter }} {{ user.userId }}</p>
+            <p>{{deliveryaddress.contactName  }}{{ sexFilters(deliveryaddress.contactSex) }} {{ deliveryaddress.contactTel }}</p>
         </div>
         <h3>{{ business.businessName }}</h3>
         <!-- 订单明细部分 -->
@@ -233,7 +233,8 @@ export default {
             foodArr,
             toPayment,
             toUserAddress,
-            toggleUsePoints
+            toggleUsePoints,
+            sexFilters
         };
     }
 }

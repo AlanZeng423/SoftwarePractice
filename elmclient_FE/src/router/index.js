@@ -72,7 +72,6 @@ const routes = [{
         path: '/paying',
         name: 'Paying',
         component: Paying
-
     }
     ]
 //解决重复路由报异常问题
