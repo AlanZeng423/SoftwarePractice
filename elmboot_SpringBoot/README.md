@@ -31,6 +31,9 @@ listBusinessSortByAverage——综合排序（各50%）
 updateViews——更新访问量  
 updateOrderQuantity——更新销量  
 
+#### 9.5
+完成首页推荐的全部内容
+前端主要是BusinessInfo Index Paying三个页面进行了修改
 
 
 # Springboot的理解
