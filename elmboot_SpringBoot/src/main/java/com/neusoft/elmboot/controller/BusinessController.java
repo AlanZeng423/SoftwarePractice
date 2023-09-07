@@ -24,4 +24,9 @@ public class BusinessController {
     public Business getBusinessById(Business business) throws Exception {
         return businessService.getBusinessById(business.getBusinessId());
     }
+
+    @RequestMapping("/listBusinessByBusinessName")
+    public List<Business> listBusinessByBusinessName(Business business) throws Exception{
+        return businessService.listBusinessByBusinessName(business.getBusinessName());
+    }
 }

@@ -13,4 +13,7 @@ public interface BusinessMapper {
 
     @Select("select * from business where businessId=#{businessId}")
     public Business getBusinessById(Integer businessId);
+
+    @Select("SELECT * FROM business WHERE businessName LIKE CONCAT('%', #{businessName}, '%')")
+    List<Business> listBusinessByBusinessName(String businessName);
 }
