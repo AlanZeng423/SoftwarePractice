@@ -48,4 +48,9 @@ public class BusinessServiceImpl implements BusinessService {
     public List<Business> listBusinessSortByAverage() {
         return businessMapper.listBusinessSortByAverage();
     }
+
+    @Override
+    public List<Business> listBusinessByBusinessName(String businessName) {
+        return businessMapper.listBusinessByBusinessName(businessName);
+    }
 }

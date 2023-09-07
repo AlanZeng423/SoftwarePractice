@@ -28,4 +28,7 @@ public interface BusinessMapper {
     public List<Business> listBusinessSortByOrderQuantity();
     @Select("select * from business order by (orderQuantity+views)/2 desc")
     public List<Business> listBusinessSortByAverage();
+
+    @Select("SELECT * FROM business WHERE businessName LIKE CONCAT('%', #{businessName}, '%')")
+    public List<Business> listBusinessByBusinessName(String businessName);
 }

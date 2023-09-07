@@ -17,6 +17,8 @@ public interface BusinessService {
     List<Business> listBusinessSortByOrderQuantity();
 
     List<Business> listBusinessSortByAverage();
+
+    List<Business> listBusinessByBusinessName(String businessName);
 }
 
 

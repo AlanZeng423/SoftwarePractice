@@ -15,6 +15,7 @@
                      column="businessId"/>
 
     </resultMap>
+
     <select id="listCart" parameterType="Cart" resultMap="cartResultMap">
         select * from cart
         <where>

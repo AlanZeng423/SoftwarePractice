@@ -50,4 +50,9 @@ public class BusinessController {
     public List<Business> listBusinessSortByAverage()throws Exception{
         return businessService.listBusinessSortByAverage();
     }
+
+    @RequestMapping("/listBusinessByBusinessName")
+    public List<Business> listBusinessByBusinessName(Business business) throws Exception{
+        return businessService.listBusinessByBusinessName(business.getBusinessName());
+    }
 }
