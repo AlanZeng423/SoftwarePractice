@@ -9,7 +9,7 @@ public interface UserService {
 
     public int saveUser(User user);
 
-    public int updatePoint(User user);
+    int updatePoint(User user);
 
     double getPointById(String userId);
 }

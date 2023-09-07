@@ -53,6 +53,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.pkslow</groupId>-->
+<!--            <artifactId>google-bard</artifactId>-->
+<!--            <version>0.0.3</version>-->
+<!--        </dependency>-->
+
     </dependencies>
     <build>
         <plugins>

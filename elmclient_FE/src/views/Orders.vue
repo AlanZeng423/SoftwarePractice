@@ -10,7 +10,7 @@
             <div class="order-info-address" @click="toUserAddress">
                 <p>{{ deliveryaddress != null ? deliveryaddress.address : '请选择送货地址' }}</p> <i class="fa fa-angle-right"></i>
             </div>
-            <p>{{ user.userName }}{{ user.userSex | sexFilter }} {{ user.userId }}</p>
+            <p>{{deliveryaddress.contactName  }}{{ sexFilters(deliveryaddress.contactSex) }} {{ deliveryaddress.contactTel }}</p>
         </div>
         <h3>{{ business.businessName }}</h3>
         <!-- 订单明细部分 -->
@@ -72,7 +72,7 @@ export default {
         const router = useRouter();
         const route = useRoute();
         const businessId = ref(route.query.businessId);
-        const UsedOrderId = ref(route.query.UsedOrderId)
+        const UsedOrderId = ref(route.query.UsedOrderId);
         const business = ref({});
         // const user = ref({});
         const user = ref({
@@ -132,7 +132,10 @@ export default {
             usePoints.value = !usePoints.value;
         }
         const toUserAddress = () => {
-            router.push({ path: '/userAddress', query: { businessId: businessId.value } });
+            router.push({ path: '/userAddress', query: { 
+                businessId: businessId.value,
+                UsedOrderId:UsedOrderId.value
+            } });
         }
         const toPayment = () => {
             if (deliveryaddress.value == null) {
@@ -182,17 +185,20 @@ export default {
         
         const totalPrice = computed(() => {
             let totalPrice = 0;
-            if(UsedOrderId.value == 0){
-                for (let cartItem of cartArr.value) {
+            // if(UsedOrderId.value == 0){
+            //     for (let cartItem of cartArr.value) {
+            //         totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+            //         //alert(totalPrice);
+            //     }
+            // }
+            // else{
+            //     for (let cartItem of cartArr.value) {
+            //         totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+            //     }
+            // }
+            for (let cartItem of cartArr.value) {
                     totalPrice += cartItem.food.foodPrice * cartItem.quantity;
-                    //alert(totalPrice);
                 }
-            }
-            else{
-                for (let cartItem of cartArr.value) {
-                    totalPrice += cartItem.food.foodPrice * cartItem.quantity;
-                }
-            }
                 totalPrice += business.value.deliveryPrice;
                 if(usePoints.value){
                     if(point.value/100 <= totalPrice){
@@ -227,7 +233,8 @@ export default {
             foodArr,
             toPayment,
             toUserAddress,
-            toggleUsePoints
+            toggleUsePoints,
+            sexFilters
         };
     }
 }

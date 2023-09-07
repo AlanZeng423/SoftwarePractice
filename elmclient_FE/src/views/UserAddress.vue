@@ -56,6 +56,7 @@ export default {
         const businessId = ref(route.query.businessId);
         const user = ref({});
         const deliveryAddressArr = ref([]);
+        const UsedOrderId = ref(route.query.UsedOrderId)
 
         const listDeliveryAddressByUserId = () => {
             //查询送货地址
@@ -82,17 +83,24 @@ export default {
 
         const setDeliveryAddress = (deliveryAddress) => { //把用户选择的默认送货地址存储到localStorage中 
             $setLocalStorage(user.value.userId,deliveryAddress); 
-            router.push({path:'/orders',query:{businessId:businessId.value}});
+            router.push({path:'/orders',query:{businessId:businessId.value,
+                UsedOrderId:UsedOrderId.value}});
         }
 
         const toAddUserAddress = () => {
-            router.push({ path: '/addUserAddress', query: { businessId: businessId.value } });
+            router.push({ path: '/addUserAddress', query: { 
+                businessId: businessId.value,
+                UsedOrderId:UsedOrderId.value
+            } });
         }
 
         const editUserAddress = (daId) => {
             router.push({
                 path: '/editUserAddress', 
-                query: { businessId: businessId.value, daId: daId }
+                query: { 
+                    businessId: businessId.value, 
+                    daId: daId,
+                    UsedOrderId:UsedOrderId.value}
             });
         }
         const removeUserAddress = (daId) => {
@@ -120,6 +128,7 @@ export default {
             businessId,
             user,
             deliveryAddressArr,
+            UsedOrderId,
             sexFilter,
             listDeliveryAddressByUserId,
             setDeliveryAddress,

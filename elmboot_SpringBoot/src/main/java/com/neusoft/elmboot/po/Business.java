@@ -10,7 +10,8 @@ public class Business {
     private double starPrice; // 起送费
     private double deliveryPrice; // 配送费
     private String remarks;
-
+    private Integer views;
+    private Integer orderQuantity;
     @Override
     public String toString() {
         return "\n商家编号：" + this.businessId +
@@ -92,5 +93,19 @@ public class Business {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public Integer getViews(){
+        return views;
+    }
+    public void setViews(Integer views){
+        this.views = views;
+    }
+
+    public Integer getOrderQuantity(){
+        return orderQuantity;
+    }
+    public void setOrderQuantity(Integer orderQuantity) {
+        this.orderQuantity = orderQuantity;
     }
 }

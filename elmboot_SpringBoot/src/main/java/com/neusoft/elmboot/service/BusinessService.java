@@ -8,6 +8,15 @@ public interface BusinessService {
     public List<Business> listBusinessByOrderTypeId(Integer orderTypeId);
 
     public Business getBusinessById(Integer businessId);
+    int updateViews(Integer businessId, Integer views);
+
+    int updateOrderQuantity(Integer businessId, Integer orderQuantity);
+
+    List<Business> listBusinessSortByView();
+
+    List<Business> listBusinessSortByOrderQuantity();
+
+    List<Business> listBusinessSortByAverage();
 }
 
 

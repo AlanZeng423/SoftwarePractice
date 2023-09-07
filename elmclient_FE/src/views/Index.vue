@@ -84,18 +84,18 @@
         </div>
         <!-- 推荐方式部分 -->
         <ul class="recommendtype">
-            <li>综合排序<i class="fa fa-caret-down"></i></li>
-            <li>距离最近</li>
-            <li>销量最高</li>
+            <li @click="getBusinessListByAverage">综合排序<i class="fa fa-caret-down"></i></li>
+            <li @click="getBusinessListByViews">访客最多</li>
+            <li @click="getBusinessListByOrderQuantity">销量最高</li>
             <li>筛选<i class="fa fa-filter"></i></li>
         </ul>
         <!-- 推荐商家列表部分 -->
         <ul class="business">
-            <li>
-                <img src="../assets/sj01.png">
+            <li v-for="item in businessArr" @click="toBusinessInfo(item.businessId)">
+                <img :src = "item.businessImg">
                 <div class="business-info">
                     <div class="business-info-h">
-                        <h3>万家饺子(软件园E18店)</h3>
+                        <h3>{{ item.businessName }}</h3>
                         <div class="business-info-like">&#8226;</div>
                     </div>
                     <div class="business-info-star">
@@ -104,20 +104,19 @@
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i> <i class="fa fa-star"></i>
-                            <p>4.9 月售345单</p>
+                            <p>4.9 月售{{item.orderQuantity}}单</p>
                         </div>
                         <div class="business-info-star-right">
                             蜂鸟专送
                         </div>
                     </div>
                     <div class="business-info-delivery">
-                        <p>&#165;15起送 | &#165;3配送</p>
-                        <p>3.22km | 30分钟</p>
+                        <p>&#165;{{item.starPrice}}起送 | &#165;{{item.deliveryPrice}}配送</p>
                     </div>
                     <div class="business-info-explain">
-                        <div>各种饺子</div>
+                        <div>{{item.businessExplain}}</div>
                     </div>
-                    <div class="business-info-promotion">
+                    <!-- <div class="business-info-promotion">
                         <div class="business-info-promotion-left">
                             <div class="business-info-promotion-left-incon">新</div>
                             <p>饿了么新用户首单立减9元</p>
@@ -129,14 +128,13 @@
                     </div>
                     <div class="business-info-promotion">
                         <div class="business-info-promotion-left">
-                            <div class="business-info-promotion-left-incon" style="background-
-color: #F1884F;">特</div>
+                            <div class="business-info-promotion-left-incon" style="background-color: #F1884F;">特</div>
                             <p>特价商品5元起</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </li>
-            <li>
+            <!-- <li>
                 <img src="../assets/sj02.png">
                 <div class="business-info">
                     <div class="business-info-h">
@@ -311,7 +309,7 @@ color: #F1884F;">特</div>
                         </div>
                     </div>
                 </div>
-            </li>
+            </li> -->
         </ul>
         <!-- 底部菜单部分 -->
         <Footer></Footer>
@@ -338,6 +336,7 @@ export default {
         const router = useRouter();
         const fixedBox = ref(null);
         const proxy = getCurrentInstance();
+        const businessArr = ref([]);
 
         onMounted(() => {
             document.onscroll = () => {
@@ -360,6 +359,12 @@ export default {
                 }
                 
             }
+            axios.post("BusinessController/listBusinessSortByAverage",qs.stringify({
+            })).then(response =>{
+                businessArr.value = response.data;
+            }).catch(error=>{
+                console.error(error);
+            })
         })
         const destroyed = () => {
             //当切换到其他组件时，就不需要document滚动条事件，所以将此事件去掉
@@ -371,10 +376,46 @@ export default {
             destroyed();
         };
 
+        const getBusinessListByViews = () =>{
+            axios.post("BusinessController/listBusinessSortByView",qs.stringify({
+            })).then(response =>{
+                businessArr.value = response.data;
+            }).catch(error=>{
+                console.error(error);
+            })
+        }
+
+        const getBusinessListByOrderQuantity = () =>{
+            axios.post("BusinessController/listBusinessSortByOrderQuantity",qs.stringify({
+            })).then(response =>{
+                businessArr.value = response.data;
+            }).catch(error=>{
+                console.error(error);
+            })
+        }
+
+        const getBusinessListByAverage = () =>{
+            axios.post("BusinessController/listBusinessSortByAverage",qs.stringify({
+            })).then(response =>{
+                businessArr.value = response.data;
+            }).catch(error=>{
+                console.error(error);
+            })
+        }
+
+        const toBusinessInfo = (businessId) =>{
+            router.push({ path: '/businessInfo', query: { businessId: businessId } });
+        }
+
         return {
             destroyed,
             toBusinessList,
-            fixedBox
+            getBusinessListByViews,
+            getBusinessListByOrderQuantity,
+            getBusinessListByAverage,
+            toBusinessInfo,
+            fixedBox,
+            businessArr
         };
     }
 

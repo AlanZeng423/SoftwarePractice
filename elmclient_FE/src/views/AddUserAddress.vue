@@ -64,6 +64,7 @@ export default {
         const route = useRoute();
         const router = useRouter();
         const businessId = ref(route.query.businessId);
+        const UsedOrderId = ref(route.query.UsedOrderId);
         const user = ref({});
         const deliveryAddress = ref({
             contactName: '',
@@ -93,7 +94,8 @@ export default {
                 if (response.data > 0) {
                     router.push({
                         path: '/userAddress', 
-                        query: { businessId: businessId.value }
+                        query: { businessId: businessId.value,
+                            UsedOrderId:UsedOrderId.value}
                     });
                 } else {
                     alert('新增地址失败!');
@@ -108,6 +110,7 @@ export default {
             businessId,
             user,
             deliveryAddress,
+            UsedOrderId,
             addUserAddress
 
         };

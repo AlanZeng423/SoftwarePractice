@@ -94,6 +94,12 @@ export default {
             businessId: businessId.value
         })).then(response => {
             business.value = response.data;
+            axios.post('BusinessController/updateViews',qs.stringify({
+            views: business.value.views+1,
+            businessId: businessId.value,
+            })).catch(error => {
+                console.error(error);
+            });
         }).catch(error => {
             console.error(error);
         });
@@ -112,7 +118,7 @@ export default {
         }).catch(error => {
             console.error(error);
         });
-
+        
     })
 
     const listCart = () => {
