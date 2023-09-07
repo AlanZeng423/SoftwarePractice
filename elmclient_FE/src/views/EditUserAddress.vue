@@ -64,6 +64,7 @@ export default {
         const router = useRouter();
         const businessId = ref(route.query.businessId);
         const daId = ref(route.query.daId);
+        const UsedOrderId = ref(route.query.UsedOrderId);
         const user = ref({});
         const deliveryAddress = ref({});
     
@@ -101,7 +102,8 @@ export default {
                         router.push({
                             path: '/userAddress',
                             query: {
-                                businessId: businessId.value
+                                businessId: businessId.value,
+                                UsedOrderId: UsedOrderId.value
                             }
                         });
                     } else {
@@ -117,6 +119,7 @@ export default {
             daId,
             user,
             deliveryAddress,
+            UsedOrderId,
             editUserAddress
         };
 

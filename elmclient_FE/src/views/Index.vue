@@ -13,8 +13,9 @@
             <!-- 当滚动条超过上面的定位块时，search-fixed-top块变成固定在顶部。 -->
             <div class="search-fixed-top" ref="fixedBox">
                 <!-- 搜索框部分中间的白框 -->
-                <div class="search-box">
-                    <i class="fa fa-search"></i>搜索饿了么商家、商品名称
+                <div class="search-fixed-top" ref="fixedBox">
+                    <i class="fa fa-search"></i><input class="search-box" type="text" v-model="serachTxt" placeholder="搜索饿了么商家、商品名称">
+                    <button class="button" @click="toSearch(serachTxt)">搜索</button>
                 </div>
             </div>
         </div>
@@ -338,6 +339,7 @@ export default {
         const router = useRouter();
         const fixedBox = ref(null);
         const proxy = getCurrentInstance();
+        const serachTxt = ref('');
 
         onMounted(() => {
             document.onscroll = () => {
@@ -371,10 +373,17 @@ export default {
             destroyed();
         };
 
+        const toSearch = (txt) => {
+            router.push({ path: '/searchResult', query: { bussinessName: txt} });
+            destroyed();
+        };
+
         return {
             destroyed,
             toBusinessList,
-            fixedBox
+            toSearch,
+            fixedBox,
+            serachTxt
         };
     }
 
@@ -432,15 +441,27 @@ export default {
 .wrapper .search .search-fixed-top .search-box {
     width: 90%;
     height: 9vw;
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 2px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 3.5vw;
     color: #AEAEAE;
-    font-family: "宋体";
     /*此样式是让文本选中状态无效*/
+    user-select: none;
+}
+
+.wrapper .search .search-fixed-top .button {
+    width: 20%;
+    height: 11vw;
+    background-color: #ffffff;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3.5vw;
+    color: #AEAEAE;
     user-select: none;
 }
 

@@ -37,10 +37,28 @@ export default {
         const orderId = ref(route.query.orderId);
         const point = ref(route.query.point);
         const orderState = ref(1);
+        const tempOrders = ref([]);
         
         // axios.post()
         onMounted(()=>{
             user.value = $getSessionStorage('user');
+
+            axios.post('OrdersController/getOrdersById',qs.stringify({
+                orderId:orderId.value
+            })).then(response => {
+                tempOrders.value = response.data;
+                axios.post('BusinessController/updateOrderQuantity',qs.stringify({
+                    businessId:tempOrders.value.business.businessId,
+                    orderQuantity:tempOrders.value.business.orderQuantity + 1
+                })).catch(error=>{
+                    console.error(error);
+                })
+            }).catch(error=>{
+                console.error(error);
+            });
+
+
+            
         })
 
         const newpoint =  computed(() =>{
@@ -81,6 +99,7 @@ export default {
             orderId,
             orderState,
             point,
+            tempOrders,
             updatePoint
         }
     }
