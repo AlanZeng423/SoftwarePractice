@@ -2,11 +2,17 @@
 
 ## 1. JDBC done
 `./JDBC_elm_admin`
+
+其中适用于项目一的sql文件在`./Database/elm_admin`下
+
 ## 2. Front_End done
 `./FrontEnd_elm_demo`
 ## 3. Servlet done
 `./elmclient_FE`
 **适用于项目3&4**
+
+其中适用于项目三四的sql文件在`./Database/elm`下
+
 ### Frontend by ALAN
 在 SoftwarePractice/myVue/elmClient 路径下
 
